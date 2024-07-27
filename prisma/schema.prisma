@@ -17,13 +17,28 @@ model Issue {
   id          Int      @id @default(autoincrement())
   title       String   @db.VarChar(255)
   description String   @db.Text
-  status      Status   @default(OPEN)
+  status      Status   @default(TODO)
+  priority    Priority @default(LOW)
+  label       Label    @default(BUG)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
 
 enum Status {
-  OPEN
+  TODO
   IN_PROGRESS
-  CLOSED
+  CANCELLED
+  DONE
+}
+
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+enum Label {
+  BUG
+  FEATURE
+  DOCUMENTATION
 }
