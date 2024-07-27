@@ -1,6 +1,6 @@
 import React from "react";
 
-const DashboardRoute = () => {
+const DashboardRoute = async () => {
   return <div>DashboardRoute</div>;
 };
 
