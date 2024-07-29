@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/Navbar";
+import ReactQueryProvider from "@/components/Providers/ReactQueryProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,11 +17,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
-        <main>
-          <Navbar />
-          {children}
-        </main>
+      <body
+        className={`${inter.className} h-screen max-h-screen overflow-hidden`}
+      >
+        <ReactQueryProvider>{children}</ReactQueryProvider>
       </body>
     </html>
   );
