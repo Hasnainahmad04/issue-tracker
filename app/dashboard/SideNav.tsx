@@ -1,12 +1,7 @@
 "use client";
 
 import Link, { LinkProps } from "next/link";
-import {
-  CalendarClock,
-  LayoutDashboard,
-  LucideIcon,
-  ShieldAlertIcon,
-} from "lucide-react";
+import { LayoutDashboard, LucideIcon, ShieldAlertIcon } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
@@ -16,7 +11,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { usePathname } from "next/navigation";
 
 type Link = {
@@ -35,7 +30,7 @@ const links: Link[] = [
   },
   {
     title: "Issues",
-    href: "/dashboard/issues",
+    href: "/dashboard/issue/list",
     icon: ShieldAlertIcon,
     variant: "ghost",
   },

@@ -48,7 +48,7 @@ const IssueForm = () => {
 
   const onSubmit = (data: IssueForm) => {
     createNewIssue(data, {
-      onSuccess: () => navigation.push("/dashboard/issues"),
+      onSuccess: () => navigation.push("/dashboard/issue/list"),
     });
   };
 
@@ -79,7 +79,6 @@ const IssueForm = () => {
                   {...field}
                   options={{
                     previewRender(markdownPlaintext) {
-                      console.log({ markdownPlaintext });
                       return ReactDOMServer.renderToString(
                         <ReactMarkdown className="prose">
                           {markdownPlaintext}
