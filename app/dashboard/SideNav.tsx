@@ -45,16 +45,15 @@ export function Nav() {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const currentPath = usePathname();
 
-  useEffect(() => {
-    handleResize();
+  // useEffect(() => {
+  //   handleResize();
 
-    window.addEventListener("resize", handleResize);
+  //   window.addEventListener("resize", handleResize);
 
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  //   return () => window.removeEventListener("resize", handleResize);
+  // }, []);
 
   const handleResize = () => {
-    console.log("Called");
     setIsCollapsed(window.innerWidth < 500);
   };
 

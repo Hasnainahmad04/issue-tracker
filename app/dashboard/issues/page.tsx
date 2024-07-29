@@ -6,7 +6,7 @@ const IssuesRoute = () => {
   return (
     <div className="px-6 mt-6">
       <div className="flex justify-between items-center w-full">
-        <h2 className="text-3xl font-semibold text-primary">Issues</h2>
+        <h2 className="text-2xl font-semibold text-primary">Issues</h2>
         <Link
           href="/dashboard/create-issue"
           className={buttonVariants({

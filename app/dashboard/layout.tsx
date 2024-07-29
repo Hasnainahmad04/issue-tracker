@@ -1,8 +1,7 @@
-import type { Metadata } from "next";
 import { Nav } from "./SideNav";
 import { CalendarClock } from "lucide-react";
 
-export default function RootLayout({
+export default function Layout({
   children,
 }: Readonly<{
   children: React.ReactNode;

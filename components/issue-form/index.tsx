@@ -16,17 +16,28 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import useCreateIssue from "@/hooks/useCreateIssue";
 import { LABELS, PRIORITIES } from "@/lib/constants";
 import { createIssueSchema } from "@/lib/validators";
 import { zodResolver } from "@hookform/resolvers/zod";
 import "easymde/dist/easymde.min.css";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
-import SimpleMDE from "react-simplemde-editor";
 import { z } from "zod";
+import ReactMarkdown from "react-markdown";
+import ReactDOMServer from "react-dom/server";
+import dynamic from "next/dynamic";
 
-type IssueForm = z.infer<typeof createIssueSchema>;
+const SimpleMDE = dynamic(() => import("react-simplemde-editor"), {
+  ssr: false,
+});
+
+export type IssueForm = z.infer<typeof createIssueSchema>;
 
 const IssueForm = () => {
+  const { mutate: createNewIssue, isPending } = useCreateIssue();
+
+  const navigation = useRouter();
   const form = useForm<IssueForm>({
     resolver: zodResolver(createIssueSchema),
     defaultValues: {
@@ -36,7 +47,9 @@ const IssueForm = () => {
   });
 
   const onSubmit = (data: IssueForm) => {
-    console.log({ data });
+    createNewIssue(data, {
+      onSuccess: () => navigation.push("/dashboard/issues"),
+    });
   };
 
   return (
@@ -62,7 +75,19 @@ const IssueForm = () => {
             <FormItem>
               <FormLabel>Description</FormLabel>
               <FormControl>
-                <SimpleMDE {...field} />
+                <SimpleMDE
+                  {...field}
+                  options={{
+                    previewRender(markdownPlaintext) {
+                      console.log({ markdownPlaintext });
+                      return ReactDOMServer.renderToString(
+                        <ReactMarkdown className="prose">
+                          {markdownPlaintext}
+                        </ReactMarkdown>
+                      );
+                    },
+                  }}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -127,7 +152,9 @@ const IssueForm = () => {
           />
         </div>
         <div className="flex w-full justify-end">
-          <Button type="submit">Submit</Button>
+          <Button type="submit" disabled={isPending}>
+            {isPending ? "Submitting..." : "Submit"}
+          </Button>
         </div>
       </form>
     </Form>
