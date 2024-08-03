@@ -16,7 +16,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import useCreateIssue from "@/hooks/useCreateIssue";
+import useCreateIssue from "@/hooks/issue/useCreateIssue";
 import { LABELS, PRIORITIES } from "@/lib/constants";
 import { createIssueSchema } from "@/lib/validators";
 import { zodResolver } from "@hookform/resolvers/zod";

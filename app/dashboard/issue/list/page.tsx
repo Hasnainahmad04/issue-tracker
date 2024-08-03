@@ -4,33 +4,11 @@ import React from "react";
 import { DataTable } from "./data-table/DataTable";
 import { columns } from "./data-table/columns";
 import { Issue } from "@prisma/client";
+import { getIssues } from "@/services/issue";
 
-const data: Issue[] = [
-  {
-    id: 1,
-    title: "Login page error",
-    description:
-      "# Login Page\n\n**Users** are unable to log in using their credentials. The login button does not respond when clicked.",
-    status: "TODO",
-    priority: "LOW",
-    label: "BUG",
-    createdAt: new Date("2024-07-29T07:26:10.017Z"),
-    updatedAt: new Date("2024-07-29T07:26:10.017Z"),
-  },
-  {
-    id: 2,
-    title: "Broken link on homepage",
-    description:
-      "The 'Contact Us' link on the homepage redirects to a 404 page",
-    status: "TODO",
-    priority: "LOW",
-    label: "BUG",
-    createdAt: new Date("2024-07-29T07:26:10.017Z"),
-    updatedAt: new Date("2024-07-29T07:26:10.017Z"),
-  },
-];
+const IssuesRoute = async () => {
+  const issues = await getIssues();
 
-const IssuesRoute = () => {
   return (
     <div className="px-6 mt-6">
       <div className="flex justify-between items-center w-full">
@@ -46,7 +24,7 @@ const IssuesRoute = () => {
           Create new
         </Link>
       </div>
-      <DataTable columns={columns} data={data} />
+      <DataTable columns={columns} data={issues} />
     </div>
   );
 };

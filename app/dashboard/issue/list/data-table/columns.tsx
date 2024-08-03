@@ -4,6 +4,8 @@ import { formatDate } from "@/lib/utils";
 import { Issue } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
 import { DataTableColumnHeader } from "./ColumnHeader";
+import Status from "./Status";
+import Priority from "./Priority";
 
 export const columns: ColumnDef<Issue>[] = [
   {
@@ -14,7 +16,6 @@ export const columns: ColumnDef<Issue>[] = [
     cell({ getValue }) {
       return <span>{`TASK-${getValue()}`}</span>;
     },
-    enableHiding: true,
     enableSorting: true,
   },
   {
@@ -22,8 +23,17 @@ export const columns: ColumnDef<Issue>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader title="Title" column={column} />
     ),
-    enableHiding: true,
     enableSorting: true,
+  },
+
+  {
+    accessorKey: "status",
+    header: ({ column }) => (
+      <DataTableColumnHeader title="Status" column={column} />
+    ),
+    cell({ row }) {
+      return <Status status={row.original.status} />;
+    },
   },
 
   {
@@ -31,6 +41,9 @@ export const columns: ColumnDef<Issue>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader title="Priority" column={column} />
     ),
+    cell({ row }) {
+      return <Priority priority={row.original.priority} />;
+    },
     enableSorting: false,
   },
   {
@@ -41,7 +54,6 @@ export const columns: ColumnDef<Issue>[] = [
     cell({ getValue }) {
       return <span>{formatDate(getValue() as string, "en-US")}</span>;
     },
-    enableHiding: true,
     enableSorting: true,
   },
 ];
