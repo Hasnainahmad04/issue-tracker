@@ -74,19 +74,8 @@ const IssueForm = () => {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Description</FormLabel>
-              <FormControl>
-                <SimpleMDE
-                  {...field}
-                  options={{
-                    previewRender(markdownPlaintext) {
-                      return ReactDOMServer.renderToString(
-                        <ReactMarkdown className="prose">
-                          {markdownPlaintext}
-                        </ReactMarkdown>
-                      );
-                    },
-                  }}
-                />
+              <FormControl className="prose">
+                <SimpleMDE {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

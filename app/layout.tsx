@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import NextTopLoader from "nextjs-toploader";
 import ReactQueryProvider from "@/components/Providers/ReactQueryProvider";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -20,6 +21,7 @@ export default function RootLayout({
       <body
         className={`${inter.className} h-screen max-h-screen overflow-hidden`}
       >
+        <NextTopLoader showSpinner={false} color="#1a1b1a" />
         <ReactQueryProvider>{children}</ReactQueryProvider>
       </body>
     </html>

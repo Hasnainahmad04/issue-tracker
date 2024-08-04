@@ -6,6 +6,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { DataTableColumnHeader } from "./ColumnHeader";
 import Status from "./Status";
 import Priority from "./Priority";
+import Title from "./Title";
 
 export const columns: ColumnDef<Issue>[] = [
   {
@@ -16,13 +17,16 @@ export const columns: ColumnDef<Issue>[] = [
     cell({ getValue }) {
       return <span>{`TASK-${getValue()}`}</span>;
     },
-    enableSorting: true,
+    enableSorting: false,
   },
   {
     accessorKey: "title",
     header: ({ column }) => (
       <DataTableColumnHeader title="Title" column={column} />
     ),
+    cell({ row }) {
+      return <Title title={row.original.title} label={row.original.label} />;
+    },
     enableSorting: true,
   },
 
@@ -34,6 +38,7 @@ export const columns: ColumnDef<Issue>[] = [
     cell({ row }) {
       return <Status status={row.original.status} />;
     },
+    enableSorting: false,
   },
 
   {

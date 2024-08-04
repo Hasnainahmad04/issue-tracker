@@ -9,3 +9,5 @@ export const DATE_FORMAT: Intl.DateTimeFormatOptions = {
   hour: "numeric",
   minute: "numeric",
 };
+
+export const INITIAL_LIMIT = 10;

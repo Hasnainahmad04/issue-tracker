@@ -6,7 +6,9 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-
+import { useDebouncedCallback } from "use-debounce";
+import { buttonVariants } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   Table,
   TableBody,
@@ -15,25 +17,68 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import Link from "next/link";
 import { DataTablePagination } from "./DataTablePagination";
+import { useState } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { MetaData } from "@/types";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  metadata: MetaData;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  metadata,
 }: DataTableProps<TData, TValue>) {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const currentPath = usePathname();
+
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
+    manualSorting: true,
+    enableMultiSort: false,
+    manualFiltering: true,
+    manualPagination: true,
+    pageCount: Math.ceil(metadata.total / metadata.limit),
+    rowCount: metadata.total,
   });
+
+  const debounced = useDebouncedCallback((val) => {
+    const params = new URLSearchParams(searchParams);
+    params.set("page", "1");
+    val ? params.set("q", val) : params.delete("q");
+    router.replace(`${currentPath}?${params.toString()}`);
+  }, 500);
+
+  console.log({ metadata });
 
   return (
     <>
+      <div className="flex justify-between w-full items-center my-2">
+        <Input
+          placeholder="Filter ...."
+          className="w-72"
+          defaultValue={searchParams.get("q") || ""}
+          onChange={(e) => debounced(e.target.value)}
+        />
+        <Link
+          href="/dashboard/issue/new"
+          className={buttonVariants({
+            variant: "default",
+            size: "default",
+            className: "bg-primary hover:bg-primary-dark",
+          })}
+        >
+          Create new
+        </Link>
+      </div>
       <div className="rounded-md border">
         <Table>
           <TableHeader>
@@ -84,7 +129,7 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-      <DataTablePagination table={table} />
+      <DataTablePagination metadata={metadata} />
     </>
   );
 }

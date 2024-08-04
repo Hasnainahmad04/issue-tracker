@@ -2,7 +2,7 @@ import { Issue } from "@prisma/client";
 import {
   CircleCheckBigIcon,
   CircleDashedIcon,
-  CircleMinusIcon,
+  CircleEllipsisIcon,
   CircleSlashIcon,
 } from "lucide-react";
 import React, { ReactNode } from "react";
@@ -11,7 +11,7 @@ const icons: Record<Issue["status"], ReactNode> = {
   CANCELLED: <CircleSlashIcon className="size-5 text-red-500" />,
   DONE: <CircleCheckBigIcon className="size-5 text-green-500" />,
   IN_PROGRESS: <CircleDashedIcon className="size-5 text-blue-500" />,
-  TODO: <CircleMinusIcon className="size-5 text-gray-500" />,
+  TODO: <CircleEllipsisIcon className="size-5 text-neutral-600" />,
 };
 
 const Status = ({ status }: { status: Issue["status"] }) => {

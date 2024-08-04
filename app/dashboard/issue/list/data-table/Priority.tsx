@@ -1,11 +1,15 @@
 import { Issue } from "@prisma/client";
-import { AngryIcon, MehIcon, SmileIcon } from "lucide-react";
-import React, { ReactNode } from "react";
+import {
+  MinusCircleIcon,
+  TrendingDownIcon,
+  TrendingUpIcon,
+} from "lucide-react";
+import { ReactNode } from "react";
 
 const icons: Record<Issue["priority"], ReactNode> = {
-  HIGH: <AngryIcon className="size-5 text-red-600" />,
-  LOW: <SmileIcon className="size-5 text-green-500" />,
-  MEDIUM: <MehIcon className="size-5 text-purple-600" />,
+  HIGH: <TrendingUpIcon className="size-5 text-red-600" />,
+  LOW: <TrendingDownIcon className="size-5 text-green-500" />,
+  MEDIUM: <MinusCircleIcon className="size-5 text-blue-500" />,
 };
 
 const Priority = ({ priority }: { priority: Issue["priority"] }) => {
