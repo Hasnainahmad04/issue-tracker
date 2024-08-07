@@ -12,3 +12,11 @@ export const createIssueSchema = z.object({
   priority: z.enum(["LOW", "MEDIUM", "HIGH"]),
   label: z.enum(["BUG", "FEATURE", "DOCUMENTATION"]),
 });
+
+export const searchParamsSchema = z.object({
+  sort: z.enum(["asc", "desc"]).optional(),
+  orderBy: z.string().optional(),
+  page: z.coerce.number().optional(),
+  limit: z.coerce.number().optional(),
+  q: z.string().optional(),
+});

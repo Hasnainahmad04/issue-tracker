@@ -16,7 +16,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import useCreateIssue from "@/hooks/useCreateIssue";
+import useCreateIssue from "@/hooks/issue/useCreateIssue";
 import { LABELS, PRIORITIES } from "@/lib/constants";
 import { createIssueSchema } from "@/lib/validators";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -48,7 +48,7 @@ const IssueForm = () => {
 
   const onSubmit = (data: IssueForm) => {
     createNewIssue(data, {
-      onSuccess: () => navigation.push("/dashboard/issues"),
+      onSuccess: () => navigation.push("/dashboard/issue/list"),
     });
   };
 
@@ -74,20 +74,8 @@ const IssueForm = () => {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Description</FormLabel>
-              <FormControl>
-                <SimpleMDE
-                  {...field}
-                  options={{
-                    previewRender(markdownPlaintext) {
-                      console.log({ markdownPlaintext });
-                      return ReactDOMServer.renderToString(
-                        <ReactMarkdown className="prose">
-                          {markdownPlaintext}
-                        </ReactMarkdown>
-                      );
-                    },
-                  }}
-                />
+              <FormControl className="prose">
+                <SimpleMDE {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
