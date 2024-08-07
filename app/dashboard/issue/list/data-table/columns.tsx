@@ -12,7 +12,7 @@ export const columns: ColumnDef<Issue>[] = [
   {
     accessorKey: "id",
     header: ({ column }) => (
-      <DataTableColumnHeader title="Task" column={column} />
+      <DataTableColumnHeader title="Task" column={column.id} />
     ),
     cell({ getValue }) {
       return <span>{`TASK-${getValue()}`}</span>;
@@ -22,7 +22,7 @@ export const columns: ColumnDef<Issue>[] = [
   {
     accessorKey: "title",
     header: ({ column }) => (
-      <DataTableColumnHeader title="Title" column={column} />
+      <DataTableColumnHeader title="Title" column={column.id} />
     ),
     cell({ row }) {
       return <Title title={row.original.title} label={row.original.label} />;
@@ -33,7 +33,7 @@ export const columns: ColumnDef<Issue>[] = [
   {
     accessorKey: "status",
     header: ({ column }) => (
-      <DataTableColumnHeader title="Status" column={column} />
+      <DataTableColumnHeader title="Status" column={column.id} />
     ),
     cell({ row }) {
       return <Status status={row.original.status} />;
@@ -44,7 +44,7 @@ export const columns: ColumnDef<Issue>[] = [
   {
     accessorKey: "priority",
     header: ({ column }) => (
-      <DataTableColumnHeader title="Priority" column={column} />
+      <DataTableColumnHeader title="Priority" column={column.id} />
     ),
     cell({ row }) {
       return <Priority priority={row.original.priority} />;
@@ -54,7 +54,7 @@ export const columns: ColumnDef<Issue>[] = [
   {
     accessorKey: "createdAt",
     header: ({ column }) => (
-      <DataTableColumnHeader title="Created At" column={column} />
+      <DataTableColumnHeader title="Created At" column={column.id} />
     ),
     cell({ getValue }) {
       return <span>{formatDate(getValue() as string, "en-US")}</span>;

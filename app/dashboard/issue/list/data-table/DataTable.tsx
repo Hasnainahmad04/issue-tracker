@@ -19,9 +19,8 @@ import {
 } from "@/components/ui/table";
 import Link from "next/link";
 import { DataTablePagination } from "./DataTablePagination";
-import { useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { MetaData } from "@/types";
+import type { MetaData } from "@/types";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -47,7 +46,6 @@ export function DataTable<TData, TValue>({
     manualFiltering: true,
     manualPagination: true,
     pageCount: Math.ceil(metadata.total / metadata.limit),
-    rowCount: metadata.total,
   });
 
   const debounced = useDebouncedCallback((val) => {
@@ -56,8 +54,6 @@ export function DataTable<TData, TValue>({
     val ? params.set("q", val) : params.delete("q");
     router.replace(`${currentPath}?${params.toString()}`);
   }, 500);
-
-  console.log({ metadata });
 
   return (
     <>

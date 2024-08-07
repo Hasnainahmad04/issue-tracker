@@ -1,3 +1,4 @@
+import { capitalize } from "@/lib/utils";
 import { Issue } from "@prisma/client";
 import {
   MinusCircleIcon,
@@ -16,7 +17,7 @@ const Priority = ({ priority }: { priority: Issue["priority"] }) => {
   return (
     <span className="inline-flex gap-2">
       {icons[priority]}
-      {priority}
+      {capitalize(priority)}
     </span>
   );
 };

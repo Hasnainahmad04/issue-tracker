@@ -1,7 +1,5 @@
 "use client";
 import { ArrowDownIcon, ArrowUpIcon, ChevronsUpDownIcon } from "lucide-react";
-import { Column } from "@tanstack/react-table";
-
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -11,43 +9,29 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { usePathname, useSearchParams, useRouter } from "next/navigation";
-import { useEffect } from "react";
 
-interface DataTableColumnHeaderProps<TData, TValue>
-  extends React.HTMLAttributes<HTMLDivElement> {
-  column: Column<TData, TValue>;
+interface Props extends React.HTMLAttributes<HTMLDivElement> {
+  column: string;
   title: string;
 }
 
-export function DataTableColumnHeader<TData, TValue>({
-  column,
-  title,
-  className,
-}: DataTableColumnHeaderProps<TData, TValue>) {
+const sortFields = ["title", "createdAt"];
+
+export function DataTableColumnHeader({ column, title, className }: Props) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  useEffect(() => {
-    // Get the initial sort order from URL params
-    const currentSortOrder = searchParams.get("sort") as "asc" | "desc" | null;
-    const currentOrderBy = searchParams.get("orderBy");
+  const currentSortOrder = searchParams.get("sort") as "asc" | "desc" | null;
+  const currentOrderBy = searchParams.get("orderBy");
 
-    currentOrderBy === column.id
-      ? column.toggleSorting(currentSortOrder === "desc")
-      : column.clearSorting();
-  }, [searchParams, column]);
-
-  if (!column.getCanSort()) {
+  if (!sortFields.includes(column)) {
     return <div className={cn(className)}>{title}</div>;
   }
 
   const handleSort = (sort: "asc" | "desc") => {
-    column.toggleSorting(sort === "desc");
-    const newSearchParams = new URLSearchParams(
-      Array.from(searchParams.entries())
-    );
-    newSearchParams.set("orderBy", column.id);
+    const newSearchParams = new URLSearchParams();
+    newSearchParams.set("orderBy", column);
     newSearchParams.set("sort", sort);
 
     const search = newSearchParams.toString();
@@ -64,9 +48,9 @@ export function DataTableColumnHeader<TData, TValue>({
             className="-ml-3 h-8 data-[state=open]:bg-accent"
           >
             <span>{title}</span>
-            {column.getIsSorted() === "desc" ? (
+            {currentOrderBy === column && currentSortOrder === "desc" ? (
               <ArrowDownIcon className="ml-2 h-4 w-4" />
-            ) : column.getIsSorted() === "asc" ? (
+            ) : currentOrderBy === column && currentSortOrder === "asc" ? (
               <ArrowUpIcon className="ml-2 h-4 w-4" />
             ) : (
               <ChevronsUpDownIcon className="ml-2 h-4 w-4" />

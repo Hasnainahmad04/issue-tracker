@@ -9,3 +9,7 @@ export function cn(...inputs: ClassValue[]) {
 export function formatDate(dateString: string, locales?: Intl.LocalesArgument) {
   return new Date(dateString).toLocaleString(locales, DATE_FORMAT);
 }
+
+export function capitalize(label: string) {
+  return label.charAt(0).toUpperCase().concat(label.slice(1).toLowerCase());
+}

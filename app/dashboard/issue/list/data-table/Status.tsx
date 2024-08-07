@@ -1,3 +1,4 @@
+import { capitalize } from "@/lib/utils";
 import { Issue } from "@prisma/client";
 import {
   CircleCheckBigIcon,
@@ -18,7 +19,7 @@ const Status = ({ status }: { status: Issue["status"] }) => {
   return (
     <span className="inline-flex gap-2 text-zinc-800">
       {icons[status]}
-      {status}
+      {capitalize(status)}
     </span>
   );
 };
