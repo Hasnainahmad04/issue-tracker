@@ -1,14 +1,17 @@
-"use client";
+'use client';
 
+import type { ColumnDef } from '@tanstack/react-table';
 import {
-  ColumnDef,
   flexRender,
   getCoreRowModel,
   useReactTable,
-} from "@tanstack/react-table";
-import { useDebouncedCallback } from "use-debounce";
-import { buttonVariants } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+} from '@tanstack/react-table';
+import Link from 'next/link';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useDebouncedCallback } from 'use-debounce';
+
+import { buttonVariants } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import {
   Table,
   TableBody,
@@ -16,11 +19,10 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import Link from "next/link";
-import { DataTablePagination } from "./DataTablePagination";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import type { MetaData } from "@/types";
+} from '@/components/ui/table';
+import type { MetaData } from '@/types';
+
+import { DataTablePagination } from './DataTablePagination';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -48,28 +50,32 @@ export function DataTable<TData, TValue>({
     pageCount: Math.ceil(metadata.total / metadata.limit),
   });
 
-  const debounced = useDebouncedCallback((val) => {
+  const debounced = useDebouncedCallback((val: string) => {
     const params = new URLSearchParams(searchParams);
-    params.set("page", "1");
-    val ? params.set("q", val) : params.delete("q");
+    params.set('page', '1');
+    if (val) {
+      params.set('q', val);
+    } else {
+      params.delete('q');
+    }
     router.replace(`${currentPath}?${params.toString()}`);
   }, 500);
 
   return (
     <>
-      <div className="flex justify-between w-full items-center my-2">
+      <div className="my-2 flex w-full items-center justify-between">
         <Input
           placeholder="Filter ...."
           className="w-72"
-          defaultValue={searchParams.get("q") || ""}
+          defaultValue={searchParams.get('q') || ''}
           onChange={(e) => debounced(e.target.value)}
         />
         <Link
           href="/dashboard/issue/new"
           className={buttonVariants({
-            variant: "default",
-            size: "default",
-            className: "bg-primary hover:bg-primary-dark",
+            variant: 'default',
+            size: 'default',
+            className: 'bg-primary hover:bg-primary-dark',
           })}
         >
           Create new
@@ -87,7 +93,7 @@ export function DataTable<TData, TValue>({
                         ? null
                         : flexRender(
                             header.column.columnDef.header,
-                            header.getContext()
+                            header.getContext(),
                           )}
                     </TableHead>
                   );
@@ -100,13 +106,13 @@ export function DataTable<TData, TValue>({
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
+                  data-state={row.getIsSelected() && 'selected'}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext()
+                        cell.getContext(),
                       )}
                     </TableCell>
                   ))}

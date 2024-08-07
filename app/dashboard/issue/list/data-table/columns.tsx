@@ -1,16 +1,18 @@
-"use client";
+'use client';
 
-import { formatDate } from "@/lib/utils";
-import { Issue } from "@prisma/client";
-import { ColumnDef } from "@tanstack/react-table";
-import { DataTableColumnHeader } from "./ColumnHeader";
-import Status from "./Status";
-import Priority from "./Priority";
-import Title from "./Title";
+import type { Issue } from '@prisma/client';
+import type { ColumnDef } from '@tanstack/react-table';
+
+import { formatDate } from '@/lib/utils';
+
+import { DataTableColumnHeader } from './ColumnHeader';
+import Priority from './Priority';
+import Status from './Status';
+import Title from './Title';
 
 export const columns: ColumnDef<Issue>[] = [
   {
-    accessorKey: "id",
+    accessorKey: 'id',
     header: ({ column }) => (
       <DataTableColumnHeader title="Task" column={column.id} />
     ),
@@ -20,7 +22,7 @@ export const columns: ColumnDef<Issue>[] = [
     enableSorting: false,
   },
   {
-    accessorKey: "title",
+    accessorKey: 'title',
     header: ({ column }) => (
       <DataTableColumnHeader title="Title" column={column.id} />
     ),
@@ -31,7 +33,7 @@ export const columns: ColumnDef<Issue>[] = [
   },
 
   {
-    accessorKey: "status",
+    accessorKey: 'status',
     header: ({ column }) => (
       <DataTableColumnHeader title="Status" column={column.id} />
     ),
@@ -42,7 +44,7 @@ export const columns: ColumnDef<Issue>[] = [
   },
 
   {
-    accessorKey: "priority",
+    accessorKey: 'priority',
     header: ({ column }) => (
       <DataTableColumnHeader title="Priority" column={column.id} />
     ),
@@ -52,12 +54,12 @@ export const columns: ColumnDef<Issue>[] = [
     enableSorting: false,
   },
   {
-    accessorKey: "createdAt",
+    accessorKey: 'createdAt',
     header: ({ column }) => (
       <DataTableColumnHeader title="Created At" column={column.id} />
     ),
     cell({ getValue }) {
-      return <span>{formatDate(getValue() as string, "en-US")}</span>;
+      return <span>{formatDate(getValue() as string, 'en-US')}</span>;
     },
     enableSorting: true,
   },

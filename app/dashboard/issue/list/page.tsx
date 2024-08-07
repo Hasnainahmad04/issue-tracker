@@ -1,9 +1,11 @@
-import React from "react";
-import { DataTable } from "./data-table/DataTable";
-import { columns } from "./data-table/columns";
-import { getIssues } from "@/services/issue";
-import { QueryParams } from "@/types";
-import { INITIAL_LIMIT } from "@/lib/constants";
+import React from 'react';
+
+import { INITIAL_LIMIT } from '@/lib/constants';
+import { getIssues } from '@/services/issue';
+import type { QueryParams } from '@/types';
+
+import { columns } from './data-table/columns';
+import { DataTable } from './data-table/DataTable';
 
 const IssuesRoute = async ({
   searchParams: { limit = INITIAL_LIMIT, page = 1, orderBy, sort, q },
@@ -13,7 +15,7 @@ const IssuesRoute = async ({
   const issues = await getIssues({ page, limit, orderBy, sort, q });
 
   return (
-    <div className="px-6 mt-6">
+    <div className="mt-6 px-6">
       <DataTable columns={columns} {...issues} />
     </div>
   );
