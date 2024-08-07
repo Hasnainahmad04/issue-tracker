@@ -1,8 +1,8 @@
-import React from 'react';
+import React from "react";
 
 const Navbar = () => {
   return (
-    <nav className="flex gap-4 border-b bg-transparent px-2 py-4">
+    <nav className="flex gap-4 px-2 py-4 bg-transparent border-b">
       <span>Logo</span>
       <ul className="flex gap-4">
         <li>Dasboard</li>

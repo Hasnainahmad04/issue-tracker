@@ -1,6 +1,5 @@
-import { CalendarClock } from 'lucide-react';
-
-import { Nav } from './SideNav';
+import { Nav } from "./SideNav";
+import { CalendarClock } from "lucide-react";
 
 export default function Layout({
   children,
@@ -9,8 +8,8 @@ export default function Layout({
 }>) {
   return (
     <main>
-      <header className="h-16 border-b">
-        <span className="my-4 inline-flex items-center gap-2 px-2 text-3xl font-medium">
+      <header className="border-b h-16">
+        <span className="inline-flex gap-2 text-3xl items-center font-medium px-2 my-4">
           <CalendarClock className="size-8" />
           FixIt
         </span>

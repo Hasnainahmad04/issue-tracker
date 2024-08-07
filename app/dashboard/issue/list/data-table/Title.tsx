@@ -1,12 +1,11 @@
-import type { Issue } from '@prisma/client';
-import React from 'react';
+import { capitalize } from "@/lib/utils";
+import { Issue } from "@prisma/client";
+import React from "react";
 
-import { capitalize } from '@/lib/utils';
-
-const Title = ({ label, title }: Pick<Issue, 'title' | 'label'>) => {
+const Title = ({ label, title }: Pick<Issue, "title" | "label">) => {
   return (
-    <div className="inline-flex items-center gap-1">
-      <span className="rounded-lg border px-2 text-sm font-semibold">
+    <div className="inline-flex gap-1 items-center">
+      <span className="px-2 text-sm border rounded-lg font-semibold">
         {capitalize(label)}
       </span>
       {title}
