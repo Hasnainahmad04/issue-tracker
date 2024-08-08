@@ -1,6 +1,8 @@
-import { createIssueSchema, searchParamsSchema } from "@/lib/validators";
-import prisma from "@/prisma/client";
-import { NextRequest, NextResponse } from "next/server";
+import type { NextRequest } from 'next/server';
+import { NextResponse } from 'next/server';
+
+import { createIssueSchema, searchParamsSchema } from '@/lib/validators';
+import prisma from '@/prisma/client';
 
 export const POST = async (req: NextRequest) => {
   const body = await req.json();
@@ -18,7 +20,7 @@ export const POST = async (req: NextRequest) => {
 export const GET = async (req: NextRequest) => {
   const { searchParams } = new URL(req.url);
   const { data, error } = searchParamsSchema.safeParse(
-    Object.fromEntries(searchParams)
+    Object.fromEntries(searchParams),
   );
   if (error) {
     return NextResponse.json({ error: error.flatten() }, { status: 422 });
@@ -42,11 +44,11 @@ export const GET = async (req: NextRequest) => {
           ? [{ title: { contains: q } }, { description: { contains: q } }]
           : undefined,
       },
-      orderBy: orderBy && sort ? { [orderBy]: sort } : { createdAt: "desc" },
+      orderBy: orderBy && sort ? { [orderBy]: sort } : { createdAt: 'desc' },
     }),
   ]);
   return NextResponse.json(
     { data: issues, metadata: { page, limit, total } },
-    { status: 200 }
+    { status: 200 },
   );
 };

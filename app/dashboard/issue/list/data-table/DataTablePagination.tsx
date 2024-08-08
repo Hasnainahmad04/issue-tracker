@@ -3,20 +3,19 @@ import {
   ChevronRightIcon,
   ChevronsLeftIcon,
   ChevronsRightIcon,
-} from "lucide-react";
-import { Table } from "@tanstack/react-table";
+} from 'lucide-react';
+import { useRouter, useSearchParams } from 'next/navigation';
 
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { MetaData } from "@/types";
-import { useSearchParams, useRouter } from "next/navigation";
-import { INITIAL_LIMIT } from "@/lib/constants";
+} from '@/components/ui/select';
+import { INITIAL_LIMIT } from '@/lib/constants';
+import type { MetaData } from '@/types';
 
 interface DataTablePaginationProps<TData> {
   metadata: MetaData;
@@ -36,25 +35,25 @@ export function DataTablePagination<TData>({
     limit: number;
   }) => {
     const newSearchParams = new URLSearchParams(
-      Array.from(searchParams.entries())
+      Array.from(searchParams.entries()),
     );
-    newSearchParams.set("page", page.toString());
-    newSearchParams.set("limit", limit.toString());
+    newSearchParams.set('page', page.toString());
+    newSearchParams.set('limit', limit.toString());
 
     router.push(`?${newSearchParams.toString()}`);
   };
 
-  const currentPage = Number(searchParams.get("page")) || 1;
-  const currentLimit = Number(searchParams.get("limit")) || INITIAL_LIMIT;
+  const currentPage = Number(searchParams.get('page')) || 1;
+  const currentLimit = Number(searchParams.get('limit')) || INITIAL_LIMIT;
   const pageCount = Math.ceil(metadata.total / currentLimit);
 
   const start = INITIAL_LIMIT * (currentPage - 1);
   const end = INITIAL_LIMIT * currentPage;
 
   return (
-    <div className="flex items-center justify-between px-2 my-2">
-      <div className="flex-1 text-sm text-muted-foreground">
-        Showing{" "}
+    <div className="my-2 flex items-center justify-between px-2">
+      <div className="text-muted-foreground flex-1 text-sm">
+        Showing{' '}
         <span className="font-semibold">
           {start + 1} to {Math.min(end, metadata.total)}
         </span>
@@ -70,7 +69,7 @@ export function DataTablePagination<TData>({
             }}
           >
             <SelectTrigger className="h-8 w-[70px]">
-              <SelectValue placeholder={searchParams.get("limit") || 10} />
+              <SelectValue placeholder={searchParams.get('limit') || 10} />
             </SelectTrigger>
             <SelectContent side="top">
               {[10, 20, 30, 40, 50].map((pageSize) => (
@@ -87,45 +86,45 @@ export function DataTablePagination<TData>({
         <div className="flex items-center space-x-2">
           <Button
             variant="outline"
-            className="hidden h-8 w-8 p-0 lg:flex"
+            className="hidden size-8 p-0 lg:flex"
             onClick={() => updatePagination({ page: 1, limit: currentLimit })}
             disabled={currentPage === 1}
           >
             <span className="sr-only">Go to first page</span>
-            <ChevronsLeftIcon className="h-4 w-4" />
+            <ChevronsLeftIcon className="size-4" />
           </Button>
           <Button
             variant="outline"
-            className="h-8 w-8 p-0"
+            className="size-8 p-0"
             onClick={() =>
               updatePagination({ page: currentPage - 1, limit: currentLimit })
             }
             disabled={currentPage === 1}
           >
             <span className="sr-only">Go to previous page</span>
-            <ChevronLeftIcon className="h-4 w-4" />
+            <ChevronLeftIcon className="size-4" />
           </Button>
           <Button
             variant="outline"
-            className="h-8 w-8 p-0"
+            className="size-8 p-0"
             onClick={() =>
               updatePagination({ page: currentPage + 1, limit: currentLimit })
             }
             disabled={currentPage === pageCount}
           >
             <span className="sr-only">Go to next page</span>
-            <ChevronRightIcon className="h-4 w-4" />
+            <ChevronRightIcon className="size-4" />
           </Button>
           <Button
             variant="outline"
-            className="hidden h-8 w-8 p-0 lg:flex"
+            className="hidden size-8 p-0 lg:flex"
             onClick={() =>
               updatePagination({ page: pageCount, limit: currentLimit })
             }
             disabled={currentPage === pageCount}
           >
             <span className="sr-only">Go to last page</span>
-            <ChevronsRightIcon className="h-4 w-4" />
+            <ChevronsRightIcon className="size-4" />
           </Button>
         </div>
       </div>

@@ -1,5 +1,14 @@
-"use client";
-import { Button } from "@/components/ui/button";
+'use client';
+
+import 'easymde/dist/easymde.min.css';
+
+import { zodResolver } from '@hookform/resolvers/zod';
+import dynamic from 'next/dynamic';
+import { useRouter } from 'next/navigation';
+import { useForm } from 'react-hook-form';
+import type { z } from 'zod';
+
+import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
@@ -7,28 +16,20 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import useCreateIssue from "@/hooks/issue/useCreateIssue";
-import { LABELS, PRIORITIES } from "@/lib/constants";
-import { createIssueSchema } from "@/lib/validators";
-import { zodResolver } from "@hookform/resolvers/zod";
-import "easymde/dist/easymde.min.css";
-import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import ReactMarkdown from "react-markdown";
-import ReactDOMServer from "react-dom/server";
-import dynamic from "next/dynamic";
+} from '@/components/ui/select';
+import useCreateIssue from '@/hooks/issue/useCreateIssue';
+import { LABELS, PRIORITIES } from '@/lib/constants';
+import { createIssueSchema } from '@/lib/validators';
 
-const SimpleMDE = dynamic(() => import("react-simplemde-editor"), {
+const SimpleMDE = dynamic(() => import('react-simplemde-editor'), {
   ssr: false,
 });
 
@@ -41,14 +42,14 @@ const IssueForm = () => {
   const form = useForm<IssueForm>({
     resolver: zodResolver(createIssueSchema),
     defaultValues: {
-      priority: "LOW",
-      label: "BUG",
+      priority: 'LOW',
+      label: 'BUG',
     },
   });
 
   const onSubmit = (data: IssueForm) => {
     createNewIssue(data, {
-      onSuccess: () => navigation.push("/dashboard/issue/list"),
+      onSuccess: () => navigation.push('/dashboard/issue/list'),
     });
   };
 
@@ -82,7 +83,7 @@ const IssueForm = () => {
           )}
         />
 
-        <div className="flex space-x-3 w-full">
+        <div className="flex w-full space-x-3">
           <FormField
             control={form.control}
             name="label"
@@ -141,7 +142,7 @@ const IssueForm = () => {
         </div>
         <div className="flex w-full justify-end">
           <Button type="submit" disabled={isPending}>
-            {isPending ? "Submitting..." : "Submit"}
+            {isPending ? 'Submitting...' : 'Submit'}
           </Button>
         </div>
       </form>
