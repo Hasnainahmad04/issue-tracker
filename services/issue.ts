@@ -1,10 +1,10 @@
-import { IssueResponse, QueryParams } from "@/types";
-import { Issue } from "@prisma/client";
-import { headers } from "next/headers";
+import { headers } from 'next/headers';
+
+import type { IssueResponse, QueryParams } from '@/types';
 
 export const getIssues = async (params: QueryParams) => {
-  const host = headers().get("host");
-  const protocol = process?.env.NODE_ENV === "development" ? "http" : "https";
+  const host = headers().get('host');
+  const protocol = process?.env.NODE_ENV === 'development' ? 'http' : 'https';
   const url = new URL(`${protocol}://${host}/api/issue`);
 
   Object.entries(params).forEach(([key, value]) => {
@@ -13,6 +13,6 @@ export const getIssues = async (params: QueryParams) => {
     }
   });
 
-  const response = await fetch(url, { cache: "no-cache" });
+  const response = await fetch(url, { cache: 'no-cache' });
   return (await response.json()) as IssueResponse;
 };
