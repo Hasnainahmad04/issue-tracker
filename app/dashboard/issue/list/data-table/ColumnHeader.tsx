@@ -50,12 +50,14 @@ export function DataTableColumnHeader({ column, title, className }: Props) {
             className="data-[state=open]:bg-accent -ml-3 h-8"
           >
             <span>{title}</span>
-            {currentOrderBy === column && currentSortOrder === 'desc' ? (
-              <ArrowDownIcon className="ml-2 size-4" />
-            ) : currentOrderBy === column && currentSortOrder === 'asc' ? (
-              <ArrowUpIcon className="ml-2 size-4" />
-            ) : (
+            {!currentSortOrder && (
               <ChevronsUpDownIcon className="ml-2 size-4" />
+            )}
+            {currentOrderBy === column && currentSortOrder === 'desc' && (
+              <ArrowDownIcon className="ml-2 size-4" />
+            )}
+            {currentOrderBy === column && currentSortOrder === 'asc' && (
+              <ArrowUpIcon className="ml-2 size-4" />
             )}
           </Button>
         </DropdownMenuTrigger>

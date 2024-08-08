@@ -17,13 +17,11 @@ import {
 import { INITIAL_LIMIT } from '@/lib/constants';
 import type { MetaData } from '@/types';
 
-interface DataTablePaginationProps<TData> {
+interface DataTablePaginationProps {
   metadata: MetaData;
 }
 
-export function DataTablePagination<TData>({
-  metadata,
-}: DataTablePaginationProps<TData>) {
+export function DataTablePagination({ metadata }: DataTablePaginationProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
 

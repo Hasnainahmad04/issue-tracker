@@ -1,9 +1,10 @@
-import { IssueForm } from "@/components/issue-form";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation } from '@tanstack/react-query';
 
-export const createIssue = async (data: IssueForm) => {
-  return fetch("/api/issue", {
-    method: "POST",
+import type { IssueFormType } from '@/components/IssueForm';
+
+export const createIssue = async (data: IssueFormType) => {
+  return fetch('/api/issue', {
+    method: 'POST',
     body: JSON.stringify(data),
   });
 };
@@ -11,7 +12,7 @@ export const createIssue = async (data: IssueForm) => {
 const useCreateIssue = () => {
   return useMutation({
     mutationFn: createIssue,
-    mutationKey: ["create-issue"],
+    mutationKey: ['create-issue'],
   });
 };
 

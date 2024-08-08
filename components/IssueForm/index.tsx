@@ -33,13 +33,13 @@ const SimpleMDE = dynamic(() => import('react-simplemde-editor'), {
   ssr: false,
 });
 
-export type IssueForm = z.infer<typeof createIssueSchema>;
+export type IssueFormType = z.infer<typeof createIssueSchema>;
 
 const IssueForm = () => {
   const { mutate: createNewIssue, isPending } = useCreateIssue();
 
   const navigation = useRouter();
-  const form = useForm<IssueForm>({
+  const form = useForm<IssueFormType>({
     resolver: zodResolver(createIssueSchema),
     defaultValues: {
       priority: 'LOW',
@@ -47,7 +47,7 @@ const IssueForm = () => {
     },
   });
 
-  const onSubmit = (data: IssueForm) => {
+  const onSubmit = (data: IssueFormType) => {
     createNewIssue(data, {
       onSuccess: () => navigation.push('/dashboard/issue/list'),
     });

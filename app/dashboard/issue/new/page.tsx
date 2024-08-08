@@ -1,6 +1,6 @@
 import React from 'react';
 
-import IssueForm from '@/components/issue-form';
+import IssueForm from '@/components/IssueForm';
 
 const CreateIssueRoute = () => {
   return (

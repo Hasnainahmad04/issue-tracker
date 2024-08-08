@@ -53,7 +53,11 @@ export function DataTable<TData, TValue>({
   const debounced = useDebouncedCallback((val) => {
     const params = new URLSearchParams(searchParams);
     params.set('page', '1');
-    val ? params.set('q', val) : params.delete('q');
+    if (val) {
+      params.set('q', val);
+    } else {
+      params.delete('q');
+    }
     router.replace(`${currentPath}?${params.toString()}`);
   }, 500);
 

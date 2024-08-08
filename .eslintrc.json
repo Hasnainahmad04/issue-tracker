@@ -36,6 +36,8 @@
         "project": "./tsconfig.json"
       },
       "rules": {
+        "@typescript-eslint/lines-between-class-members": "off",
+        "@typescript-eslint/no-throw-literal": "off",
         "prettier/prettier": [
           "error",
           {
