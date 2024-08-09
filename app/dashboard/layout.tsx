@@ -17,7 +17,7 @@ export default function Layout({
       </header>
       <div className="flex h-[calc(100vh-4rem)] overflow-hidden">
         <Nav />
-        <div className="w-full overflow-y-scroll">{children}</div>
+        <div className="w-full overflow-y-scroll p-8">{children}</div>
       </div>
     </main>
   );
