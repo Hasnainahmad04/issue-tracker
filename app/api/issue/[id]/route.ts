@@ -20,3 +20,20 @@ export const PATCH = async (
 
   return NextResponse.json(updatedIssue, { status: 200 });
 };
+
+export const DELETE = async (
+  _req: NextRequest,
+  { params }: { params: { id: string } },
+) => {
+  try {
+    await prisma.issue.delete({
+      where: { id: Number(params.id) },
+    });
+    return NextResponse.json(null, { status: 200 });
+  } catch (error) {
+    return NextResponse.json(
+      { message: 'Internal server error' },
+      { status: 500 },
+    );
+  }
+};
