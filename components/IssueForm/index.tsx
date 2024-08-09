@@ -3,6 +3,7 @@
 import 'easymde/dist/easymde.min.css';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import type { Issue } from '@prisma/client';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
@@ -35,16 +36,20 @@ const SimpleMDE = dynamic(() => import('react-simplemde-editor'), {
 
 export type IssueFormType = z.infer<typeof createIssueSchema>;
 
-const IssueForm = () => {
+const IssueForm = ({ issue }: { issue?: Issue }) => {
   const { mutate: createNewIssue, isPending } = useCreateIssue();
+
+  const defaultValues = {
+    priority: issue?.priority || 'LOW',
+    label: issue?.label || 'BUG',
+    description: issue?.description || undefined,
+    title: issue?.title || undefined,
+  };
 
   const navigation = useRouter();
   const form = useForm<IssueFormType>({
     resolver: zodResolver(createIssueSchema),
-    defaultValues: {
-      priority: 'LOW',
-      label: 'BUG',
-    },
+    defaultValues,
   });
 
   const onSubmit = (data: IssueFormType) => {
@@ -141,9 +146,15 @@ const IssueForm = () => {
           />
         </div>
         <div className="flex w-full justify-end">
-          <Button type="submit" disabled={isPending}>
-            {isPending ? 'Submitting...' : 'Submit'}
-          </Button>
+          {issue?.id ? (
+            <Button type="submit" disabled={isPending}>
+              {isPending ? 'Updating...' : 'Update'}
+            </Button>
+          ) : (
+            <Button type="submit" disabled={isPending}>
+              {isPending ? 'Submitting...' : 'Submit'}
+            </Button>
+          )}
         </div>
       </form>
     </Form>

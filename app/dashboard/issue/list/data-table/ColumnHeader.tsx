@@ -50,7 +50,7 @@ export function DataTableColumnHeader({ column, title, className }: Props) {
             className="data-[state=open]:bg-accent -ml-3 h-8"
           >
             <span>{title}</span>
-            {!currentSortOrder && (
+            {currentOrderBy !== column && (
               <ChevronsUpDownIcon className="ml-2 size-4" />
             )}
             {currentOrderBy === column && currentSortOrder === 'desc' && (
@@ -63,11 +63,11 @@ export function DataTableColumnHeader({ column, title, className }: Props) {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="start">
           <DropdownMenuItem onClick={() => handleSort('asc')}>
-            <ArrowUpIcon className="text-muted-foreground/70 mr-2 size-3.5" />
+            <ArrowUpIcon className="mr-2 size-3.5" />
             Asc
           </DropdownMenuItem>
           <DropdownMenuItem onClick={() => handleSort('desc')}>
-            <ArrowDownIcon className="text-muted-foreground/70 mr-2 size-3.5" />
+            <ArrowDownIcon className="mr-2 size-3.5" />
             Desc
           </DropdownMenuItem>
         </DropdownMenuContent>
