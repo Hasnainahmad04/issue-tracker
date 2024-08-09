@@ -27,6 +27,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import useCreateIssue from '@/hooks/issue/useCreateIssue';
+import useUpdateIssue from '@/hooks/issue/useUpdateIssue';
 import { LABELS, PRIORITIES } from '@/lib/constants';
 import { createIssueSchema } from '@/lib/validators';
 
@@ -38,6 +39,7 @@ export type IssueFormType = z.infer<typeof createIssueSchema>;
 
 const IssueForm = ({ issue }: { issue?: Issue }) => {
   const { mutate: createNewIssue, isPending } = useCreateIssue();
+  const { mutate: updateIssue, isPending: isUpdating } = useUpdateIssue();
 
   const defaultValues = {
     priority: issue?.priority || 'LOW',
@@ -53,9 +55,13 @@ const IssueForm = ({ issue }: { issue?: Issue }) => {
   });
 
   const onSubmit = (data: IssueFormType) => {
-    createNewIssue(data, {
-      onSuccess: () => navigation.push('/dashboard/issue/list'),
-    });
+    const onSuccess = () => navigation.push('/dashboard/issue/list');
+
+    if (issue?.id) {
+      updateIssue({ id: issue.id, data }, { onSuccess });
+    } else {
+      createNewIssue(data, { onSuccess });
+    }
   };
 
   return (
@@ -148,7 +154,7 @@ const IssueForm = ({ issue }: { issue?: Issue }) => {
         <div className="flex w-full justify-end">
           {issue?.id ? (
             <Button type="submit" disabled={isPending}>
-              {isPending ? 'Updating...' : 'Update'}
+              {isUpdating ? 'Updating...' : 'Update'}
             </Button>
           ) : (
             <Button type="submit" disabled={isPending}>
