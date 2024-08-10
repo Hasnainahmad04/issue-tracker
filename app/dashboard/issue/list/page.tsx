@@ -14,11 +14,7 @@ const IssuesRoute = async ({
 }) => {
   const issues = await getIssues({ page, limit, orderBy, sort, q });
 
-  return (
-    <div className="mt-6 px-6">
-      <DataTable columns={columns} {...issues} />
-    </div>
-  );
+  return <DataTable columns={columns} {...issues} />;
 };
 
 export default IssuesRoute;

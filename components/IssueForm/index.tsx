@@ -3,6 +3,7 @@
 import 'easymde/dist/easymde.min.css';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import type { Issue } from '@prisma/client';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
@@ -26,6 +27,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import useCreateIssue from '@/hooks/issue/useCreateIssue';
+import useUpdateIssue from '@/hooks/issue/useUpdateIssue';
 import { LABELS, PRIORITIES } from '@/lib/constants';
 import { createIssueSchema } from '@/lib/validators';
 
@@ -35,22 +37,24 @@ const SimpleMDE = dynamic(() => import('react-simplemde-editor'), {
 
 export type IssueFormType = z.infer<typeof createIssueSchema>;
 
-const IssueForm = () => {
+const IssueForm = ({ issue }: { issue?: Issue }) => {
   const { mutate: createNewIssue, isPending } = useCreateIssue();
+  const { mutate: updateIssue, isPending: isUpdating } = useUpdateIssue();
 
   const navigation = useRouter();
   const form = useForm<IssueFormType>({
     resolver: zodResolver(createIssueSchema),
-    defaultValues: {
-      priority: 'LOW',
-      label: 'BUG',
-    },
+    defaultValues: issue ? { ...issue } : { priority: 'LOW', label: 'BUG' },
   });
 
   const onSubmit = (data: IssueFormType) => {
-    createNewIssue(data, {
-      onSuccess: () => navigation.push('/dashboard/issue/list'),
-    });
+    const onSuccess = () => navigation.push('/dashboard/issue/list');
+
+    if (issue?.id) {
+      updateIssue({ id: issue.id, data }, { onSuccess });
+    } else {
+      createNewIssue(data, { onSuccess });
+    }
   };
 
   return (
@@ -141,9 +145,15 @@ const IssueForm = () => {
           />
         </div>
         <div className="flex w-full justify-end">
-          <Button type="submit" disabled={isPending}>
-            {isPending ? 'Submitting...' : 'Submit'}
-          </Button>
+          {issue?.id ? (
+            <Button type="submit" disabled={isPending}>
+              {isUpdating ? 'Updating...' : 'Update'}
+            </Button>
+          ) : (
+            <Button type="submit" disabled={isPending}>
+              {isPending ? 'Submitting...' : 'Submit'}
+            </Button>
+          )}
         </div>
       </form>
     </Form>
