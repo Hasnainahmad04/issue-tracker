@@ -1,13 +1,16 @@
 'use client';
 
+/* eslint-disable react-hooks/rules-of-hooks */
+
 import type { Issue } from '@prisma/client';
 import type { ColumnDef } from '@tanstack/react-table';
 import { MoreHorizontal } from 'lucide-react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 import {
   AlertDialog,
-  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
@@ -90,8 +93,10 @@ export const columns: ColumnDef<Issue>[] = [
     id: 'actions',
     cell: ({ row }) => {
       const task = row.original;
-      // eslint-disable-next-line react-hooks/rules-of-hooks
-      const { mutate: deleteIssue, isPending } = useDeleteIssue();
+      const { mutateAsync: deleteIssue, isPending } = useDeleteIssue();
+      const router = useRouter();
+      const [open, setOpen] = useState(false);
+
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -107,7 +112,7 @@ export const columns: ColumnDef<Issue>[] = [
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild>
-              <AlertDialog>
+              <AlertDialog open={open} onOpenChange={setOpen}>
                 <AlertDialogTrigger className="p-2">Delete</AlertDialogTrigger>
                 <AlertDialogContent>
                   <AlertDialogHeader>
@@ -120,13 +125,16 @@ export const columns: ColumnDef<Issue>[] = [
                   </AlertDialogHeader>
                   <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction
-                      onClick={() => {
-                        deleteIssue(task.id);
+                    <Button
+                      variant="destructive"
+                      onClick={async () => {
+                        await deleteIssue(task.id);
+                        router.refresh();
+                        setOpen(false);
                       }}
                     >
                       {isPending ? 'Deleting...' : 'Delete'}
-                    </AlertDialogAction>
+                    </Button>
                   </AlertDialogFooter>
                 </AlertDialogContent>
               </AlertDialog>

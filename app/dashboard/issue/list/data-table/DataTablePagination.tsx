@@ -50,11 +50,11 @@ export function DataTablePagination({ metadata }: DataTablePaginationProps) {
 
   return (
     <div className="my-2 flex items-center justify-between px-2">
-      <div className="text-muted-foreground flex-1 text-sm">
+      <div className="flex-1 text-sm">
         Showing{' '}
         <span className="font-semibold">
           {start + 1} to {Math.min(end, metadata.total)}
-        </span>
+        </span>{' '}
         of {metadata.total} item(s)
       </div>
       <div className="flex items-center space-x-6 lg:space-x-8">

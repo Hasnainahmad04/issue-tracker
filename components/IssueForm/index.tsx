@@ -41,17 +41,10 @@ const IssueForm = ({ issue }: { issue?: Issue }) => {
   const { mutate: createNewIssue, isPending } = useCreateIssue();
   const { mutate: updateIssue, isPending: isUpdating } = useUpdateIssue();
 
-  const defaultValues = {
-    priority: issue?.priority || 'LOW',
-    label: issue?.label || 'BUG',
-    description: issue?.description || undefined,
-    title: issue?.title || undefined,
-  };
-
   const navigation = useRouter();
   const form = useForm<IssueFormType>({
     resolver: zodResolver(createIssueSchema),
-    defaultValues,
+    defaultValues: issue ? { ...issue } : { priority: 'LOW', label: 'BUG' },
   });
 
   const onSubmit = (data: IssueFormType) => {
