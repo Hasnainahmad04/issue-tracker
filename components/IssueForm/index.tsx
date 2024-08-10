@@ -48,7 +48,9 @@ const IssueForm = ({ issue }: { issue?: Issue }) => {
   });
 
   const onSubmit = (data: IssueFormType) => {
-    const onSuccess = () => navigation.push('/dashboard/issue/list');
+    const onSuccess = () => {
+      navigation.replace('/dashboard/issue/list');
+    };
 
     if (issue?.id) {
       updateIssue({ id: issue.id, data }, { onSuccess });

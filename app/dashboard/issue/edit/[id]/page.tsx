@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
 import React from 'react';
 
-import { getTaskDetail } from '@/app/actions/task';
+import { getIssueDetail } from '@/app/actions/task';
 import IssueForm from '@/components/IssueForm';
 
 type Props = {
@@ -9,7 +9,7 @@ type Props = {
 };
 
 const EditIssueRoute = async ({ params }: Props) => {
-  const task = await getTaskDetail(Number(params.id));
+  const task = await getIssueDetail(Number(params.id));
   if (!task) return notFound();
 
   return (

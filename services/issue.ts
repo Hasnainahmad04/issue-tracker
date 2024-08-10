@@ -13,6 +13,8 @@ export const getIssues = async (params: QueryParams) => {
     }
   });
 
-  const response = await fetch(url, { cache: 'no-cache' });
+  const response = await fetch(url, {
+    cache: 'no-cache',
+  });
   return (await response.json()) as IssueResponse;
 };
