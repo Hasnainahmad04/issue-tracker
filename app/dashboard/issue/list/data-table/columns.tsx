@@ -9,16 +9,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
-import {
-  AlertDialog,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from '@/components/ui/alert-dialog';
+import DeleteDialog from '@/components/DeleteDialog';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -42,8 +33,12 @@ export const columns: ColumnDef<Issue>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader title="Task" column={column.id} />
     ),
-    cell({ getValue }) {
-      return <span>{`TASK-${getValue()}`}</span>;
+    cell({ row }) {
+      return (
+        <Link
+          href={`/dashboard/issue/${row.original.id}`}
+        >{`TASK-${row.original.id}`}</Link>
+      );
     },
     enableSorting: false,
   },
@@ -53,7 +48,11 @@ export const columns: ColumnDef<Issue>[] = [
       <DataTableColumnHeader title="Title" column={column.id} />
     ),
     cell({ row }) {
-      return <Title title={row.original.title} label={row.original.label} />;
+      return (
+        <Link href={`/dashboard/issue/${row.original.id}`}>
+          <Title title={row.original.title} label={row.original.label} />
+        </Link>
+      );
     },
     enableSorting: true,
   },
@@ -92,7 +91,7 @@ export const columns: ColumnDef<Issue>[] = [
   {
     id: 'actions',
     cell: ({ row }) => {
-      const task = row.original;
+      const issue = row.original;
       const { mutateAsync: deleteIssue, isPending } = useDeleteIssue();
       const router = useRouter();
       const [open, setOpen] = useState(false);
@@ -108,36 +107,25 @@ export const columns: ColumnDef<Issue>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem>
-              <Link href={`/dashboard/issue/edit/${task.id}`}>Edit</Link>
+              <Link href={`/dashboard/issue/edit/${issue.id}`}>Edit</Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild>
-              <AlertDialog open={open} onOpenChange={setOpen}>
-                <AlertDialogTrigger className="p-2">Delete</AlertDialogTrigger>
-                <AlertDialogContent>
-                  <AlertDialogHeader>
-                    <AlertDialogTitle>
-                      Are you absolutely sure?
-                    </AlertDialogTitle>
-                    <AlertDialogDescription>
-                      Are you sure you want to delete <b>{task.title}</b> {' ?'}
-                    </AlertDialogDescription>
-                  </AlertDialogHeader>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <Button
-                      variant="destructive"
-                      onClick={async () => {
-                        await deleteIssue(task.id);
-                        router.refresh();
-                        setOpen(false);
-                      }}
-                    >
-                      {isPending ? 'Deleting...' : 'Delete'}
-                    </Button>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
+              <DeleteDialog
+                title="Delete"
+                onOpenChange={setOpen}
+                open={open}
+                issue={issue}
+                loading={isPending}
+                onDelete={() => {
+                  deleteIssue(issue.id, {
+                    onSuccess: () => {
+                      setOpen(false);
+                      router.refresh();
+                    },
+                  });
+                }}
+              />
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

@@ -49,7 +49,7 @@ export function DataTablePagination({ metadata }: DataTablePaginationProps) {
   const end = INITIAL_LIMIT * currentPage;
 
   return (
-    <div className="my-2 flex items-center justify-between px-2">
+    <div className="my-2 flex flex-col justify-between px-2 md:flex-row md:items-center">
       <div className="flex-1 text-sm">
         Showing{' '}
         <span className="font-semibold">
@@ -59,7 +59,7 @@ export function DataTablePagination({ metadata }: DataTablePaginationProps) {
       </div>
       <div className="flex items-center space-x-6 lg:space-x-8">
         <div className="flex items-center space-x-2">
-          <p className="text-sm font-medium">Rows per page</p>
+          <p className="text-sm font-medium">Limit</p>
           <Select
             value={`${currentLimit}`}
             onValueChange={(value: any) => {
