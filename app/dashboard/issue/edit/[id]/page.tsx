@@ -1,7 +1,6 @@
 import { notFound } from 'next/navigation';
-import React from 'react';
 
-import { getIssueDetail } from '@/app/actions/task';
+import { getIssueDetail } from '@/app/actions/issue';
 import IssueForm from '@/components/IssueForm';
 
 type Props = {

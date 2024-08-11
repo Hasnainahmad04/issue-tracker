@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { INITIAL_LIMIT } from '@/lib/constants';
 import { getIssues } from '@/services/issue';
 import type { QueryParams } from '@/types';
@@ -14,7 +12,11 @@ const IssuesRoute = async ({
 }) => {
   const issues = await getIssues({ page, limit, orderBy, sort, q });
 
-  return <DataTable columns={columns} {...issues} />;
+  return (
+    <div className="p-8">
+      <DataTable columns={columns} {...issues} />
+    </div>
+  );
 };
 
 export default IssuesRoute;
