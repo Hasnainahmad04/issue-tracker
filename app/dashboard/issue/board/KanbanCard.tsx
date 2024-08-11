@@ -2,8 +2,10 @@ import type { Issue } from '@prisma/client';
 
 const KanbanCard = ({ issue }: { issue: Issue }) => {
   return (
-    <div className="flex rounded-lg border border-gray-500 bg-white p-3 shadow-md">
-      <span className="text-lg font-semibold text-black">{issue.title}</span>
+    <div className="divide-y rounded-lg border border-neutral-200 bg-white">
+      <span className="block p-2 text-sm font-medium text-zinc-900">
+        {issue.title}
+      </span>
     </div>
   );
 };

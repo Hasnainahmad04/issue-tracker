@@ -10,6 +10,7 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 import DeleteDialog from '@/components/DeleteDialog';
+import { AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -112,7 +113,7 @@ export const columns: ColumnDef<Issue>[] = [
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild>
               <DeleteDialog
-                title="Delete"
+                title={<AlertDialogTrigger>Delete</AlertDialogTrigger>}
                 onOpenChange={setOpen}
                 open={open}
                 issue={issue}

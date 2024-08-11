@@ -11,7 +11,7 @@ import React from 'react';
 export const KanbanBoardContainer = ({ children }: React.PropsWithChildren) => {
   return (
     <div className="flex h-[100vh-64px] w-full flex-col">
-      <div className="flex size-full overflow-auto p-8">{children}</div>
+      <div className="flex h-[90vh] w-full overflow-auto p-8">{children}</div>
     </div>
   );
 };

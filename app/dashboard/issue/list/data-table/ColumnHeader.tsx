@@ -17,7 +17,7 @@ interface Props extends React.HTMLAttributes<HTMLDivElement> {
   title: string;
 }
 
-const sortFields = ['title', 'createdAt'];
+const sortFields = ['title', 'createdAt', 'status'];
 
 export function DataTableColumnHeader({ column, title, className }: Props) {
   const router = useRouter();

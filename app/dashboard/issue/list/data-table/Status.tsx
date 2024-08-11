@@ -6,7 +6,6 @@ import {
   CircleSlashIcon,
 } from 'lucide-react';
 import type { ReactNode } from 'react';
-import React from 'react';
 
 import { capitalize } from '@/lib/utils';
 
@@ -21,7 +20,7 @@ const Status = ({ status }: { status: Issue['status'] }) => {
   return (
     <span className="inline-flex gap-2 text-zinc-800">
       {icons[status]}
-      {capitalize(status)}
+      {status.split('_').map(capitalize).join(' ')}
     </span>
   );
 };
