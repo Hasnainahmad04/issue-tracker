@@ -23,6 +23,7 @@ enum Status {
   IN_PROGRESS
   CANCELLED
   DONE
+  BACKLOG
 }
 
 enum Priority {

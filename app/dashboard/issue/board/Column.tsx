@@ -12,10 +12,11 @@ type Props = {
 };
 
 const statusMetadata: Record<Status, { title: string; background: string }> = {
-  TODO: { background: 'bg-green-400', title: 'Todo' },
+  TODO: { background: 'bg-neutral-500', title: 'Todo' },
   IN_PROGRESS: { background: 'bg-sky-500', title: 'In Progress' },
   CANCELLED: { background: 'bg-red-500', title: 'Cancelled' },
-  DONE: { background: 'bg-slate-300', title: 'Done' },
+  DONE: { background: 'bg-green-500', title: 'Done' },
+  BACKLOG: { background: 'bg-yellow-500', title: 'Backlog' },
 };
 
 const Column = ({

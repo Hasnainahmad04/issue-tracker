@@ -4,6 +4,7 @@ import {
   CircleDashedIcon,
   CircleEllipsisIcon,
   CircleSlashIcon,
+  TimerResetIcon,
 } from 'lucide-react';
 import type { ReactNode } from 'react';
 
@@ -14,6 +15,7 @@ const icons: Record<Issue['status'], ReactNode> = {
   DONE: <CircleCheckBigIcon className="size-5 text-green-500" />,
   IN_PROGRESS: <CircleDashedIcon className="size-5 text-blue-500" />,
   TODO: <CircleEllipsisIcon className="size-5 text-neutral-600" />,
+  BACKLOG: <TimerResetIcon className="size-5 text-neutral-600" />,
 };
 
 const Status = ({ status }: { status: Issue['status'] }) => {

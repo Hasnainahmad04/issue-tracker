@@ -5,8 +5,8 @@ import { capitalize, cn } from '@/lib/utils';
 
 const colors: Record<Issue['priority'], ReactNode> = {
   HIGH: 'bg-red-500',
-  LOW: 'bg-green-400',
-  MEDIUM: 'bg-slate-300',
+  LOW: 'bg-green-500',
+  MEDIUM: 'bg-yellow-500',
 };
 
 const Priority = ({ priority }: { priority: Issue['priority'] }) => {
