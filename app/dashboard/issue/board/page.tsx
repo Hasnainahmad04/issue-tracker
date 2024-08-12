@@ -1,5 +1,9 @@
+import { getAllIssues } from '@/app/actions/issue';
+
 import Board from './Board';
 
-export default function Page() {
-  return <Board data={[]} />;
+export default async function Page() {
+  const data = await getAllIssues();
+
+  return <Board data={data} />;
 }

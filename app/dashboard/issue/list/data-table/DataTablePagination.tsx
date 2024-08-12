@@ -4,7 +4,7 @@ import {
   ChevronsLeftIcon,
   ChevronsRightIcon,
 } from 'lucide-react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -23,6 +23,7 @@ interface DataTablePaginationProps {
 
 export function DataTablePagination({ metadata }: DataTablePaginationProps) {
   const router = useRouter();
+  const currentPath = usePathname();
   const searchParams = useSearchParams();
 
   const updatePagination = ({
@@ -38,7 +39,9 @@ export function DataTablePagination({ metadata }: DataTablePaginationProps) {
     newSearchParams.set('page', page.toString());
     newSearchParams.set('limit', limit.toString());
 
-    router.push(`?${newSearchParams.toString()}`);
+    router.push(`${currentPath}?${newSearchParams.toString()}`, {
+      scroll: false,
+    });
   };
 
   const currentPage = Number(searchParams.get('page')) || 1;
