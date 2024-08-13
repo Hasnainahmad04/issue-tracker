@@ -14,16 +14,35 @@ type Props = {
 };
 
 const Board = ({ data }: React.PropsWithChildren<Props>) => {
-  const [taskStages] = useState(
-    Object.groupBy(data, (item) => item.status) || null,
-  );
+  const initialState: Record<Status, Issue[]> = {
+    TODO: [],
+    BACKLOG: [],
+    IN_PROGRESS: [],
+    DONE: [],
+    CANCELLED: [],
+  };
+  const [taskStages, setTaskStages] = useState({
+    ...initialState,
+    ...Object.groupBy(data, (item) => item.status),
+  });
 
   const handleOnDragEnd = (event: DragEndEvent) => {
-    const status = event.over?.id as undefined | Status | null;
+    const currStatus = event.over?.id as undefined | Status | null;
     const taskId = event.active.id as string;
-    const card = event.active.data.current;
+    const issue = event.active.data.current?.issue as Issue;
+    const prevStatus = event.active.data.current?.prevStatus as Status;
 
-    console.log({ status, taskId, card });
+    if (currStatus) {
+      const state = { ...taskStages };
+      const prevStatusState = [...state[prevStatus]];
+      const updatedPrevState = prevStatusState.filter(
+        (item) => item.id !== Number(taskId),
+      );
+      state[currStatus].push(issue);
+      taskStages[prevStatus] = updatedPrevState;
+
+      setTaskStages(state);
+    }
   };
 
   return (
@@ -31,17 +50,12 @@ const Board = ({ data }: React.PropsWithChildren<Props>) => {
       <KanbanBoard onDragEnd={handleOnDragEnd}>
         {taskStages &&
           Object.entries(taskStages).map(([status, issues]) => (
-            <Column
-              key={status}
-              id={status}
-              title={status as Status}
-              count={issues.length}
-            >
+            <Column key={status} id={status} title={status as Status}>
               {issues.map((issue) => (
                 <KanbanItem
                   key={issue.id}
                   id={issue.id.toString()}
-                  data={issue}
+                  data={{ issue, prevStatus: status }}
                 >
                   <KanbanCard issue={issue} />
                 </KanbanItem>
