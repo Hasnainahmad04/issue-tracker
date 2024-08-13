@@ -4,6 +4,8 @@ import type { DragEndEvent } from '@dnd-kit/core';
 import type { Issue, Status } from '@prisma/client';
 import React, { useState } from 'react';
 
+import useUpdateIssue from '@/hooks/issue/useUpdateIssue';
+
 import Column from './Column';
 import { KanbanBoard, KanbanBoardContainer } from './Kanban';
 import KanbanCard from './KanbanCard';
@@ -21,27 +23,40 @@ const Board = ({ data }: React.PropsWithChildren<Props>) => {
     DONE: [],
     CANCELLED: [],
   };
+  const { mutate: updateIssueStatus } = useUpdateIssue();
   const [taskStages, setTaskStages] = useState({
     ...initialState,
     ...Object.groupBy(data, (item) => item.status),
   });
 
   const handleOnDragEnd = (event: DragEndEvent) => {
-    const currStatus = event.over?.id as undefined | Status | null;
+    const status = event.over?.id as undefined | Status | null;
     const taskId = event.active.id as string;
     const issue = event.active.data.current?.issue as Issue;
     const prevStatus = event.active.data.current?.prevStatus as Status;
 
-    if (currStatus) {
+    if (status) {
       const state = { ...taskStages };
       const prevStatusState = [...state[prevStatus]];
       const updatedPrevState = prevStatusState.filter(
         (item) => item.id !== Number(taskId),
       );
-      state[currStatus].push(issue);
-      taskStages[prevStatus] = updatedPrevState;
+      state[prevStatus] = updatedPrevState;
+      state[status].push({ ...issue, status });
 
       setTaskStages(state);
+      updateIssueStatus(
+        { id: Number(taskId), data: { ...issue, status } },
+
+        {
+          onSuccess: () => {
+            alert('Status Updated');
+          },
+          onError: () => {
+            setTaskStages(taskStages);
+          },
+        },
+      );
     }
   };
 

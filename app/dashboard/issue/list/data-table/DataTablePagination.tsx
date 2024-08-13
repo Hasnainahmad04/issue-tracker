@@ -48,8 +48,8 @@ export function DataTablePagination({ metadata }: DataTablePaginationProps) {
   const currentLimit = Number(searchParams.get('limit')) || INITIAL_LIMIT;
   const pageCount = Math.ceil(metadata.total / currentLimit);
 
-  const start = INITIAL_LIMIT * (currentPage - 1);
-  const end = INITIAL_LIMIT * currentPage;
+  const start = currentLimit * (currentPage - 1);
+  const end = currentLimit * currentPage;
 
   return (
     <div className="my-2 flex flex-col justify-between px-2 md:flex-row md:items-center">

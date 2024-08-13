@@ -11,6 +11,9 @@ export const createIssueSchema = z.object({
     .min(1),
   priority: z.enum(['LOW', 'MEDIUM', 'HIGH']),
   label: z.enum(['BUG', 'FEATURE', 'DOCUMENTATION']),
+  status: z
+    .enum(['TODO', 'BACKLOG', 'DONE', 'IN_PROGRESS', 'CANCELLED'])
+    .optional(),
 });
 
 export const searchParamsSchema = z.object({
