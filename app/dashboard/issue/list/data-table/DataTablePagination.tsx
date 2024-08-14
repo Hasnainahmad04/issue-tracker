@@ -4,7 +4,7 @@ import {
   ChevronsLeftIcon,
   ChevronsRightIcon,
 } from 'lucide-react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -23,6 +23,7 @@ interface DataTablePaginationProps {
 
 export function DataTablePagination({ metadata }: DataTablePaginationProps) {
   const router = useRouter();
+  const currentPath = usePathname();
   const searchParams = useSearchParams();
 
   const updatePagination = ({
@@ -38,15 +39,17 @@ export function DataTablePagination({ metadata }: DataTablePaginationProps) {
     newSearchParams.set('page', page.toString());
     newSearchParams.set('limit', limit.toString());
 
-    router.push(`?${newSearchParams.toString()}`);
+    router.push(`${currentPath}?${newSearchParams.toString()}`, {
+      scroll: false,
+    });
   };
 
   const currentPage = Number(searchParams.get('page')) || 1;
   const currentLimit = Number(searchParams.get('limit')) || INITIAL_LIMIT;
   const pageCount = Math.ceil(metadata.total / currentLimit);
 
-  const start = INITIAL_LIMIT * (currentPage - 1);
-  const end = INITIAL_LIMIT * currentPage;
+  const start = currentLimit * (currentPage - 1);
+  const end = currentLimit * currentPage;
 
   return (
     <div className="my-2 flex flex-col justify-between px-2 md:flex-row md:items-center">

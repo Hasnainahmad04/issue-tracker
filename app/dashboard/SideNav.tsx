@@ -1,7 +1,7 @@
 'use client';
 
 import type { LucideIcon } from 'lucide-react';
-import { LayoutDashboard, ShieldAlertIcon } from 'lucide-react';
+import { LayoutDashboard, ListTodoIcon, SquareKanbanIcon } from 'lucide-react';
 import type { LinkProps } from 'next/link';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -33,7 +33,13 @@ const links: NavItem[] = [
   {
     title: 'Issues',
     href: '/dashboard/issue/list',
-    icon: ShieldAlertIcon,
+    icon: ListTodoIcon,
+    variant: 'ghost',
+  },
+  {
+    title: 'Board',
+    href: '/dashboard/issue/board',
+    icon: SquareKanbanIcon,
     variant: 'ghost',
   },
 ];

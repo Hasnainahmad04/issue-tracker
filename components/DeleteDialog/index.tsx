@@ -2,7 +2,6 @@
 
 import type { Issue } from '@prisma/client';
 import type { ReactNode } from 'react';
-import React from 'react';
 
 import {
   AlertDialog,

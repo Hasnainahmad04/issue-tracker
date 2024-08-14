@@ -1,23 +1,22 @@
 import type { Issue } from '@prisma/client';
-import {
-  MinusCircleIcon,
-  TrendingDownIcon,
-  TrendingUpIcon,
-} from 'lucide-react';
 import type { ReactNode } from 'react';
 
-import { capitalize } from '@/lib/utils';
+import { capitalize, cn } from '@/lib/utils';
 
-const icons: Record<Issue['priority'], ReactNode> = {
-  HIGH: <TrendingUpIcon className="size-5 text-red-600" />,
-  LOW: <TrendingDownIcon className="size-5 text-green-500" />,
-  MEDIUM: <MinusCircleIcon className="size-5 text-blue-500" />,
+const colors: Record<Issue['priority'], ReactNode> = {
+  HIGH: 'bg-red-500',
+  LOW: 'bg-green-500',
+  MEDIUM: 'bg-yellow-500',
 };
 
 const Priority = ({ priority }: { priority: Issue['priority'] }) => {
   return (
-    <span className="inline-flex gap-2">
-      {icons[priority]}
+    <span
+      className={cn(
+        'inline-flex items-center gap-2 rounded-md px-2 py-1 text-xs text-white',
+        colors[priority],
+      )}
+    >
       {capitalize(priority)}
     </span>
   );

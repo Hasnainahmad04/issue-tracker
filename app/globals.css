@@ -1,3 +1,29 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+  --sb-track-color: #ffffff;
+  --sb-thumb-color: #1a1b1a;
+  --sb-size: 5px;
+}
+
+@layer utilities {
+  .column-scrollbar::-webkit-scrollbar {
+    @apply w-1;
+  }
+
+  .column-scrollbar::-webkit-scrollbar-track {
+    @apply rounded bg-neutral-100;
+  }
+
+  .column-scrollbar::-webkit-scrollbar-thumb {
+    @apply rounded bg-gray-500;
+  }
+
+  @supports not selector(::-webkit-scrollbar) {
+    .column-scrollbar {
+      scrollbar-color: var(--sb-thumb-color) var(--sb-track-color);
+    }
+  }
+}

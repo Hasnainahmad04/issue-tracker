@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
 
-import { getIssueDetail } from '@/app/actions/task';
+import { getIssueDetail } from '@/app/actions/issue';
 
 import IssueDetail from './IssueDetail';
 
@@ -15,7 +15,11 @@ const ViewTaskPage = async ({ params }: Props) => {
 
   if (!issue) return notFound();
 
-  return <IssueDetail issue={issue} />;
+  return (
+    <div className="p-8">
+      <IssueDetail issue={issue} />
+    </div>
+  );
 };
 
 export default ViewTaskPage;
