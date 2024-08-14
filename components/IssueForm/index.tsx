@@ -6,6 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import type { Issue } from '@prisma/client';
 import { CloudUploadIcon } from 'lucide-react';
 import dynamic from 'next/dynamic';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { CldUploadWidget } from 'next-cloudinary';
 import { useForm } from 'react-hook-form';
@@ -42,8 +43,6 @@ export type IssueFormType = z.infer<typeof createIssueSchema>;
 const IssueForm = ({ issue }: { issue?: Issue }) => {
   const { mutate: createNewIssue, isPending } = useCreateIssue();
   const { mutate: updateIssue, isPending: isUpdating } = useUpdateIssue();
-
-  console.log(issue);
 
   const navigation = useRouter();
   const form = useForm<IssueFormType>({
@@ -130,6 +129,37 @@ const IssueForm = ({ issue }: { issue?: Issue }) => {
             )}
           </CldUploadWidget>
         )}
+        <div className="flex gap-4">
+          {form.watch('assets').map((asset) => {
+            return (
+              <div
+                key={asset.url}
+                className="size-36 overflow-hidden rounded-lg border"
+              >
+                {asset.type === 'video' ? (
+                  <video
+                    width={144}
+                    height={144}
+                    controls
+                    className="size-full"
+                  >
+                    <source src={asset.url} />
+                    <track src={asset.url} kind="captions" />
+                    Your browser does not support the video tag.
+                  </video>
+                ) : (
+                  <Image
+                    src={asset.url}
+                    alt=""
+                    width={1000}
+                    height={1000}
+                    className="size-full object-contain"
+                  />
+                )}
+              </div>
+            );
+          })}
+        </div>
 
         <div className="flex w-full space-x-3">
           <FormField

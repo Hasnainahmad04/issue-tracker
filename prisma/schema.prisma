@@ -45,5 +45,5 @@ model Asset {
   type      String   @db.VarChar(127)
   createdAt DateTime @default(now())
   issueId   Int
-  issue     Issue    @relation(fields: [issueId], references: [id])
+  issue     Issue    @relation(fields: [issueId], references: [id], onDelete: Cascade)
 }

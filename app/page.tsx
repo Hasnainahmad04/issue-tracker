@@ -13,6 +13,9 @@ export default function Home() {
         <li>
           <Link href="/dashboard/issue/board">Board</Link>
         </li>
+        <li>
+          <Link href="/dashboard/issue/new">Create</Link>
+        </li>
       </ul>
     </main>
   );
