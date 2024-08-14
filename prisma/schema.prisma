@@ -16,6 +16,7 @@ model Issue {
   updatedAt   DateTime @updatedAt
   label       Label    @default(BUG)
   priority    Priority @default(LOW)
+  assets      Asset[]
 }
 
 enum Status {
@@ -36,4 +37,13 @@ enum Label {
   BUG
   FEATURE
   DOCUMENTATION
+}
+
+model Asset {
+  id        Int      @id @default(autoincrement())
+  url       String   @db.VarChar(255)
+  type      String   @db.VarChar(127)
+  createdAt DateTime @default(now())
+  issueId   Int
+  issue     Issue    @relation(fields: [issueId], references: [id])
 }

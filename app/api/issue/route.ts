@@ -10,8 +10,12 @@ export const POST = async (req: NextRequest) => {
   if (!validation.success) {
     return NextResponse.json(validation.error.flatten(), { status: 400 });
   }
+  const { assets, ...issue } = validation.data;
   const newIssue = await prisma.issue.create({
-    data: validation.data,
+    data: {
+      ...issue,
+      assets: { createMany: { data: assets } },
+    },
   });
 
   return NextResponse.json(newIssue, { status: 201 });
@@ -37,6 +41,7 @@ export const GET = async (req: NextRequest) => {
       },
     }),
     prisma.issue.findMany({
+      include: { assets: true },
       skip: (page - 1) * limit,
       take: limit,
       where: {

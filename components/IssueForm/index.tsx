@@ -4,8 +4,10 @@ import 'easymde/dist/easymde.min.css';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { Issue } from '@prisma/client';
+import { CloudUploadIcon } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
+import { CldUploadWidget } from 'next-cloudinary';
 import { useForm } from 'react-hook-form';
 import type { z } from 'zod';
 
@@ -41,10 +43,14 @@ const IssueForm = ({ issue }: { issue?: Issue }) => {
   const { mutate: createNewIssue, isPending } = useCreateIssue();
   const { mutate: updateIssue, isPending: isUpdating } = useUpdateIssue();
 
+  console.log(issue);
+
   const navigation = useRouter();
   const form = useForm<IssueFormType>({
     resolver: zodResolver(createIssueSchema),
-    defaultValues: issue ? { ...issue } : { priority: 'LOW', label: 'BUG' },
+    defaultValues: issue
+      ? { ...issue }
+      : { priority: 'LOW', label: 'BUG', assets: [] },
   });
 
   const onSubmit = (data: IssueFormType) => {
@@ -59,9 +65,11 @@ const IssueForm = ({ issue }: { issue?: Issue }) => {
     }
   };
 
+  console.log('form error', form.formState.errors);
+
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <FormField
           control={form.control}
           name="title"
@@ -88,6 +96,40 @@ const IssueForm = ({ issue }: { issue?: Issue }) => {
             </FormItem>
           )}
         />
+
+        {!issue && (
+          <CldUploadWidget
+            uploadPreset="ml_default"
+            options={{
+              folder: 'fixit-assets',
+              sources: ['camera', 'local', 'url', 'google_drive'],
+              maxFiles: 4,
+              defaultSource: 'local',
+              clientAllowedFormats: ['image', 'video'],
+            }}
+            signatureEndpoint="/api/sign-cloudinary-assets"
+            onSuccess={({ info }) => {
+              if (!info || typeof info === 'string') return;
+              const prevValues = form.getValues('assets');
+              form.setValue('assets', [
+                ...prevValues,
+                { type: info.resource_type, url: info.url },
+              ]);
+            }}
+          >
+            {({ open }) => (
+              <Button
+                type="button"
+                onClick={() => open()}
+                className="gap-2"
+                variant="outline"
+              >
+                <CloudUploadIcon className="size-4 text-primary" />
+                Upload Assets
+              </Button>
+            )}
+          </CldUploadWidget>
+        )}
 
         <div className="flex w-full space-x-3">
           <FormField

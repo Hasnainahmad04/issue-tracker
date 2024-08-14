@@ -13,9 +13,11 @@ export const PATCH = async (
   if (!validation.success) {
     return NextResponse.json(validation.error.flatten(), { status: 400 });
   }
+  // eslint-disable-next-line unused-imports/no-unused-vars
+  const { assets, ...issue } = validation.data;
   const updatedIssue = await prisma.issue.update({
     where: { id: Number(params.id) },
-    data: validation.data,
+    data: issue,
   });
 
   return NextResponse.json(updatedIssue, { status: 200 });

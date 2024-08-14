@@ -1,6 +1,5 @@
 'use client';
 
-import type { Issue } from '@prisma/client';
 import { SquarePenIcon, TrashIcon } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -17,6 +16,7 @@ import {
 } from '@/components/ui/tooltip';
 import useDeleteIssue from '@/hooks/issue/useDeleteIssue';
 import { formatDate } from '@/lib/utils';
+import type { Issue } from '@/types';
 
 type Props = {
   issue: Issue;
@@ -26,6 +26,7 @@ const IssueDetail = ({ issue }: Props) => {
   const [open, setOpen] = useState(false);
   const { mutate: deleteIssue, isPending } = useDeleteIssue();
   const router = useRouter();
+
   return (
     <div className="prose mx-auto">
       <div className="mb-8 flex w-full justify-between">
@@ -52,7 +53,11 @@ const IssueDetail = ({ issue }: Props) => {
               title={
                 <Tooltip delayDuration={0}>
                   <TooltipTrigger asChild>
-                    <Button size="icon" variant="ghost">
+                    <Button
+                      size="icon"
+                      variant="ghost"
+                      onClick={() => setOpen(true)}
+                    >
                       <TrashIcon className="size-4 text-red-600" />
                     </Button>
                   </TooltipTrigger>
