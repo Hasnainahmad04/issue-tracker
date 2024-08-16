@@ -5,6 +5,7 @@ import type { Status } from '@prisma/client';
 import React, { useState } from 'react';
 
 import useUpdateIssue from '@/hooks/issue/useUpdateIssue';
+import { groupBy } from '@/lib/utils';
 import type { Issue } from '@/types';
 
 import Column from './Column';
@@ -27,7 +28,7 @@ const Board = ({ data }: React.PropsWithChildren<Props>) => {
   const { mutate: updateIssueStatus } = useUpdateIssue();
   const [taskStages, setTaskStages] = useState({
     ...initialState,
-    ...Object.groupBy(data, (item) => item.status),
+    ...groupBy<Issue, 'status'>(data, (item) => item.status),
   });
 
   const handleOnDragEnd = (event: DragEndEvent) => {
