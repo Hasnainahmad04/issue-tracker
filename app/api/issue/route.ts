@@ -4,6 +4,8 @@ import { NextResponse } from 'next/server';
 import { createIssueSchema, searchParamsSchema } from '@/lib/validators';
 import prisma from '@/prisma/client';
 
+export const dynamic = 'force-dynamic';
+
 export const POST = async (req: NextRequest) => {
   const body = await req.json();
   const validation = createIssueSchema.safeParse(body);
