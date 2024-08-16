@@ -2,8 +2,6 @@
 
 import prisma from '@/prisma/client';
 
-export const dynamic = 'force-dynamic';
-
 export const getIssueDetail = async (id: number) => {
   const issue = await prisma.issue.findUnique({
     where: { id },
