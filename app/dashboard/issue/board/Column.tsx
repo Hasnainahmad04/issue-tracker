@@ -11,11 +11,11 @@ type Props = {
 };
 
 const statusMetadata: Record<Status, { title: string; background: string }> = {
-  TODO: { background: 'bg-neutral-500', title: 'Todo' },
-  IN_PROGRESS: { background: 'bg-sky-500', title: 'In Progress' },
-  CANCELLED: { background: 'bg-red-500', title: 'Cancelled' },
-  DONE: { background: 'bg-green-500', title: 'Done' },
-  BACKLOG: { background: 'bg-yellow-500', title: 'Backlog' },
+  TODO: { background: 'bg-neutral-100 text-neutral-800', title: 'Todo' },
+  IN_PROGRESS: { background: 'bg-sky-100 text-sky-800', title: 'In Progress' },
+  CANCELLED: { background: 'bg-red-100 text-red-800', title: 'Cancelled' },
+  DONE: { background: 'bg-green-100 text-green-800', title: 'Done' },
+  BACKLOG: { background: 'bg-yellow-100 text-yellow-800', title: 'Backlog' },
 };
 
 const Column = ({
@@ -34,17 +34,9 @@ const Column = ({
           statusMetadata[title].background,
         )}
       >
-        <span
-          className="truncate text-xs font-bold uppercase text-white"
-          title={title}
-        >
+        <span className="truncate text-xs font-bold uppercase" title={title}>
           {statusMetadata[title].title}
         </span>
-        {/* {Boolean(count) && (
-          <span className="inline-flex size-6 items-center justify-center rounded-full bg-neutral-100 text-xs text-zinc-800">
-            {count}
-          </span>
-        )} */}
       </div>
       <div
         style={{ overflowY: active ? 'unset' : 'auto' }}

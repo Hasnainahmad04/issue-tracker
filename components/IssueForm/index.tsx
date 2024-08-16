@@ -4,11 +4,10 @@ import 'easymde/dist/easymde.min.css';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { Issue } from '@prisma/client';
-import { CloudUploadIcon } from 'lucide-react';
+import { nanoid } from 'nanoid';
 import dynamic from 'next/dynamic';
-import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { CldUploadWidget } from 'next-cloudinary';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import type { z } from 'zod';
 
@@ -32,6 +31,7 @@ import {
 import useCreateIssue from '@/hooks/issue/useCreateIssue';
 import useUpdateIssue from '@/hooks/issue/useUpdateIssue';
 import { LABELS, PRIORITIES } from '@/lib/constants';
+import { supabase } from '@/lib/supabse';
 import { createIssueSchema } from '@/lib/validators';
 
 const SimpleMDE = dynamic(() => import('react-simplemde-editor'), {
@@ -41,8 +41,9 @@ const SimpleMDE = dynamic(() => import('react-simplemde-editor'), {
 export type IssueFormType = z.infer<typeof createIssueSchema>;
 
 const IssueForm = ({ issue }: { issue?: Issue }) => {
-  const { mutate: createNewIssue, isPending } = useCreateIssue();
-  const { mutate: updateIssue, isPending: isUpdating } = useUpdateIssue();
+  const { mutateAsync: createNewIssue } = useCreateIssue();
+  const { mutateAsync: updateIssue } = useUpdateIssue();
+  const [files, setFiles] = useState<FileList | null>(null);
 
   const navigation = useRouter();
   const form = useForm<IssueFormType>({
@@ -52,15 +53,37 @@ const IssueForm = ({ issue }: { issue?: Issue }) => {
       : { priority: 'LOW', label: 'BUG', assets: [] },
   });
 
-  const onSubmit = (data: IssueFormType) => {
+  const onSubmit = async (data: IssueFormType) => {
     const onSuccess = () => {
       navigation.replace('/dashboard/issue/list');
     };
 
+    const assets = await Promise.all(
+      Array.from(files || []).map(async (file) => {
+        const id = nanoid();
+        const [type, fileType] = file.type.split('/');
+
+        const { data: result } = await supabase.storage
+          .from('images')
+          .upload(`${id}.${fileType}`, file);
+
+        if (!result) return null;
+
+        const { data: url } = supabase.storage
+          .from('images')
+          .getPublicUrl(result.path);
+
+        return { type: type!, url: url.publicUrl };
+      }),
+    );
+
     if (issue?.id) {
-      updateIssue({ id: issue.id, data }, { onSuccess });
+      await updateIssue({ id: issue.id, data }, { onSuccess });
     } else {
-      createNewIssue(data, { onSuccess });
+      await createNewIssue(
+        { ...data, assets: assets.filter((asset) => asset !== null) },
+        { onSuccess },
+      );
     }
   };
 
@@ -95,70 +118,16 @@ const IssueForm = ({ issue }: { issue?: Issue }) => {
         />
 
         {!issue && (
-          <CldUploadWidget
-            uploadPreset="ml_default"
-            options={{
-              folder: 'fixit-assets',
-              sources: ['camera', 'local', 'url', 'google_drive'],
-              maxFiles: 4,
-              defaultSource: 'local',
-              clientAllowedFormats: ['image', 'video'],
-              theme: 'purple',
-            }}
-            signatureEndpoint="/api/sign-cloudinary-assets"
-            onSuccess={({ info }) => {
-              if (!info || typeof info === 'string') return;
-              const prevValues = form.getValues('assets');
-              form.setValue('assets', [
-                ...prevValues,
-                { type: info.resource_type, url: info.url },
-              ]);
-            }}
-          >
-            {({ open }) => (
-              <Button
-                type="button"
-                onClick={() => open()}
-                className="gap-2"
-                variant="outline"
-              >
-                <CloudUploadIcon className="size-4 text-primary" />
-                Upload Assets
-              </Button>
-            )}
-          </CldUploadWidget>
+          <FormItem>
+            <FormLabel>Asset</FormLabel>
+            <Input
+              type="file"
+              accept="image/*"
+              onChange={(e) => setFiles(e.target.files)}
+              multiple
+            />
+          </FormItem>
         )}
-        <div className="flex gap-4">
-          {form.watch('assets').map((asset) => {
-            return (
-              <div
-                key={asset.url}
-                className="size-36 overflow-hidden rounded-lg border"
-              >
-                {asset.type === 'video' ? (
-                  <video
-                    width={144}
-                    height={144}
-                    controls
-                    className="size-full"
-                  >
-                    <source src={asset.url} />
-                    <track src={asset.url} kind="captions" />
-                    Your browser does not support the video tag.
-                  </video>
-                ) : (
-                  <Image
-                    src={asset.url}
-                    alt=""
-                    width={1000}
-                    height={1000}
-                    className="size-full object-contain"
-                  />
-                )}
-              </div>
-            );
-          })}
-        </div>
 
         <div className="flex w-full space-x-3">
           <FormField
@@ -219,12 +188,12 @@ const IssueForm = ({ issue }: { issue?: Issue }) => {
         </div>
         <div className="flex w-full justify-end">
           {issue?.id ? (
-            <Button type="submit" disabled={isPending}>
-              {isUpdating ? 'Updating...' : 'Update'}
+            <Button type="submit" disabled={form.formState.isSubmitting}>
+              {form.formState.isSubmitting ? 'Updating...' : 'Update'}
             </Button>
           ) : (
-            <Button type="submit" disabled={isPending}>
-              {isPending ? 'Submitting...' : 'Submit'}
+            <Button type="submit" disabled={form.formState.isSubmitting}>
+              {form.formState.isSubmitting ? 'Submitting...' : 'Submit'}
             </Button>
           )}
         </div>

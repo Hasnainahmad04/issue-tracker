@@ -27,7 +27,6 @@ export const searchParamsSchema = z.object({
 
 export const envVariableSchema = z.object({
   DATABASE_URL: z.string(),
-  NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME: z.string(),
-  NEXT_PUBLIC_CLOUDINARY_API_KEY: z.string(),
-  CLOUDINARY_API_SECRET: z.string(),
+  NEXT_PUBLIC_SUPABASE_URL: z.string(),
+  SUPABASE_KEY: z.string(),
 });

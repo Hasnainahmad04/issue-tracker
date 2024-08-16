@@ -1,3 +1,5 @@
+'use server';
+
 import prisma from '@/prisma/client';
 
 export const getIssueDetail = async (id: number) => {

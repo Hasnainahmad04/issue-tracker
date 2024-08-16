@@ -16,7 +16,7 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import useDeleteIssue from '@/hooks/issue/useDeleteIssue';
-import { formatDate } from '@/lib/utils';
+import { cn, formatDate } from '@/lib/utils';
 import type { Issue } from '@/types';
 
 type Props = {
@@ -25,9 +25,8 @@ type Props = {
 
 const IssueDetail = ({ issue }: Props) => {
   const [open, setOpen] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(0);
   const { mutate: deleteIssue, isPending } = useDeleteIssue();
-  // const videos = issue.assets.filter((asset) => asset.type === 'video');
-  const images = issue.assets.filter((asset) => asset.type === 'image');
   const router = useRouter();
 
   return (
@@ -83,24 +82,35 @@ const IssueDetail = ({ issue }: Props) => {
           </TooltipProvider>
         </div>
       </div>
-      <div className="flex">
-        {images.map((asset) => {
+      {issue.assets.length && (
+        <a
+          href={issue.assets[selectedImage]?.url}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <Image
+            src={issue.assets[selectedImage]?.url || ''}
+            width={500}
+            height={500}
+            className="aspect-video rounded-md border"
+            alt={`Attachment for ${issue.assets[selectedImage]?.issueId}`}
+          />
+        </a>
+      )}
+      <div className="flex gap-4 overflow-x-auto">
+        {issue.assets.map((asset, index) => {
           return (
-            <div
-              className="block size-36 overflow-hidden rounded-md border"
-              // href={asset.url}
+            <Image
+              src={asset.url}
               key={asset.id}
-              // target="_blank"
-              // rel="noopener noreferrer"
-            >
-              <Image
-                src={asset.url}
-                width={200}
-                height={200}
-                className="size-36 object-contain"
-                alt={`Attachment for ${asset.issueId}`}
-              />
-            </div>
+              width={500}
+              height={500}
+              className={cn(
+                `h-24 w-36 cursor-pointer rounded-md border object-cover transition ease-linear hover:scale-105 ${selectedImage === index ? 'brightness-50' : 'brightness-100'}`,
+              )}
+              alt={`Attachment for ${asset.issueId}`}
+              onClick={() => setSelectedImage(index)}
+            />
           );
         })}
       </div>
