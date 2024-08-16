@@ -1,6 +1,7 @@
 'use client';
 
 import { SquarePenIcon, TrashIcon } from 'lucide-react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
@@ -25,6 +26,8 @@ type Props = {
 const IssueDetail = ({ issue }: Props) => {
   const [open, setOpen] = useState(false);
   const { mutate: deleteIssue, isPending } = useDeleteIssue();
+  // const videos = issue.assets.filter((asset) => asset.type === 'video');
+  const images = issue.assets.filter((asset) => asset.type === 'image');
   const router = useRouter();
 
   return (
@@ -80,6 +83,28 @@ const IssueDetail = ({ issue }: Props) => {
           </TooltipProvider>
         </div>
       </div>
+      <div className="flex">
+        {images.map((asset) => {
+          return (
+            <div
+              className="block size-36 overflow-hidden rounded-md border"
+              // href={asset.url}
+              key={asset.id}
+              // target="_blank"
+              // rel="noopener noreferrer"
+            >
+              <Image
+                src={asset.url}
+                width={200}
+                height={200}
+                className="size-36 object-contain"
+                alt={`Attachment for ${asset.issueId}`}
+              />
+            </div>
+          );
+        })}
+      </div>
+
       <ReactMarkdown>{issue.description}</ReactMarkdown>
     </div>
   );

@@ -4,7 +4,7 @@ import type { ReactNode } from 'react';
 import { capitalize, cn } from '@/lib/utils';
 
 const colors: Record<Issue['priority'], ReactNode> = {
-  HIGH: 'bg-red-500',
+  HIGH: 'bg-red-500 ',
   LOW: 'bg-green-500',
   MEDIUM: 'bg-yellow-500',
 };

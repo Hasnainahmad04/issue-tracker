@@ -64,8 +64,6 @@ const IssueForm = ({ issue }: { issue?: Issue }) => {
     }
   };
 
-  console.log('form error', form.formState.errors);
-
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -105,6 +103,7 @@ const IssueForm = ({ issue }: { issue?: Issue }) => {
               maxFiles: 4,
               defaultSource: 'local',
               clientAllowedFormats: ['image', 'video'],
+              theme: 'purple',
             }}
             signatureEndpoint="/api/sign-cloudinary-assets"
             onSuccess={({ info }) => {

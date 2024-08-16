@@ -3,20 +3,30 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 model Issue {
   id          Int      @id @default(autoincrement())
   title       String   @db.VarChar(255)
-  description String   @db.Text
+  description String
   status      Status   @default(TODO)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   label       Label    @default(BUG)
   priority    Priority @default(LOW)
   assets      Asset[]
+}
+
+model Asset {
+  id        Int      @id @default(autoincrement())
+  url       String   @db.VarChar(255)
+  type      String   @db.VarChar(127)
+  createdAt DateTime @default(now())
+  issueId   Int
+  issue     Issue    @relation(fields: [issueId], references: [id], onDelete: Cascade)
 }
 
 enum Status {
@@ -37,13 +47,4 @@ enum Label {
   BUG
   FEATURE
   DOCUMENTATION
-}
-
-model Asset {
-  id        Int      @id @default(autoincrement())
-  url       String   @db.VarChar(255)
-  type      String   @db.VarChar(127)
-  createdAt DateTime @default(now())
-  issueId   Int
-  issue     Issue    @relation(fields: [issueId], references: [id], onDelete: Cascade)
 }
