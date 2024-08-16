@@ -1,10 +1,11 @@
 'use client';
 
 import type { DragEndEvent } from '@dnd-kit/core';
-import type { Issue, Status } from '@prisma/client';
+import type { Status } from '@prisma/client';
 import React, { useState } from 'react';
 
 import useUpdateIssue from '@/hooks/issue/useUpdateIssue';
+import type { Issue } from '@/types';
 
 import Column from './Column';
 import { KanbanBoard, KanbanBoardContainer } from './Kanban';

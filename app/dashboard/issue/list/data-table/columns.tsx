@@ -2,7 +2,6 @@
 
 /* eslint-disable react-hooks/rules-of-hooks */
 
-import type { Issue } from '@prisma/client';
 import type { ColumnDef } from '@tanstack/react-table';
 import { MoreHorizontal } from 'lucide-react';
 import Link from 'next/link';
@@ -22,6 +21,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import useDeleteIssue from '@/hooks/issue/useDeleteIssue';
 import { formatDate } from '@/lib/utils';
+import type { Issue } from '@/types';
 
 import { DataTableColumnHeader } from './ColumnHeader';
 import Priority from './Priority';

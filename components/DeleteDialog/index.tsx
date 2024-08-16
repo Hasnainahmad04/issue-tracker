@@ -1,6 +1,5 @@
 'use client';
 
-import type { Issue } from '@prisma/client';
 import type { ReactNode } from 'react';
 
 import {
@@ -13,6 +12,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
+import type { Issue } from '@/types';
 
 import { Button } from '../ui/button';
 

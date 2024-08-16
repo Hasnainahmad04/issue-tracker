@@ -5,6 +5,8 @@ import type { QueryParams } from '@/types';
 import { columns } from './data-table/columns';
 import { DataTable } from './data-table/DataTable';
 
+export const dynamic = 'force-dynamic';
+
 const IssuesRoute = async ({
   searchParams: { limit = INITIAL_LIMIT, page = 1, orderBy, sort, q },
 }: {

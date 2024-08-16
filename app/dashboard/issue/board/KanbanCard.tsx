@@ -1,4 +1,4 @@
-import type { Issue } from '@prisma/client';
+import type { Issue } from '@/types';
 
 const KanbanCard = ({ issue }: { issue: Issue }) => {
   return (
