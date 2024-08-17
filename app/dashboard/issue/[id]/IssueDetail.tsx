@@ -82,7 +82,7 @@ const IssueDetail = ({ issue }: Props) => {
           </TooltipProvider>
         </div>
       </div>
-      {issue.assets.length && (
+      {Boolean(issue.assets.length) && (
         <a
           href={issue.assets[selectedImage]?.url}
           target="_blank"

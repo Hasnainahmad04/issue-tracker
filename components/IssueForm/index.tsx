@@ -55,7 +55,7 @@ const IssueForm = ({ issue }: { issue?: Issue }) => {
 
   const onSubmit = async (data: IssueFormType) => {
     const onSuccess = () => {
-      navigation.replace('/dashboard/issue/list');
+      navigation.replace('/dashboard/issue/list', { scroll: false });
     };
 
     const assets = await Promise.all(
