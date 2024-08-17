@@ -9,6 +9,7 @@ import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'react-hot-toast';
 import type { z } from 'zod';
 
 import { Button } from '@/components/ui/button';
@@ -55,7 +56,7 @@ const IssueForm = ({ issue }: { issue?: Issue }) => {
 
   const onSubmit = async (data: IssueFormType) => {
     const onSuccess = () => {
-      navigation.replace('/dashboard/issue/list');
+      navigation.replace('/dashboard/issue/list', { scroll: false });
     };
 
     const assets = await Promise.all(
@@ -78,11 +79,22 @@ const IssueForm = ({ issue }: { issue?: Issue }) => {
     );
 
     if (issue?.id) {
-      await updateIssue({ id: issue.id, data }, { onSuccess });
+      toast.promise(updateIssue({ id: issue.id, data }, { onSuccess }), {
+        error: 'Failed to update',
+        loading: 'Updating',
+        success: 'Updated',
+      });
     } else {
-      await createNewIssue(
-        { ...data, assets: assets.filter((asset) => asset !== null) },
-        { onSuccess },
+      toast.promise(
+        createNewIssue(
+          { ...data, assets: assets.filter((asset) => asset !== null) },
+          { onSuccess },
+        ),
+        {
+          error: 'Failed to update',
+          loading: 'Submitting',
+          success: 'Created',
+        },
       );
     }
   };

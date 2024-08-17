@@ -14,7 +14,9 @@ export const getIssues = async (params: QueryParams) => {
   });
 
   const response = await fetch(url, {
-    cache: 'no-cache',
+    cache: 'no-store',
   });
   return (await response.json()) as IssueResponse;
 };
+
+export const revalidate = 10;
