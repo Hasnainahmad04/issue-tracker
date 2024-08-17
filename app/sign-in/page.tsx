@@ -54,12 +54,21 @@ const SignInPage = () => {
             </span>
           </Button>
         </form>
-        <Button className="inline-flex w-full justify-start bg-gray-800 text-center text-white">
-          <GithubIcon className="mr-2 size-6" />
-          <span className="flex w-full justify-center">
-            Sign in with Github
-          </span>
-        </Button>
+        <form
+          className="w-full"
+          action={async () => {
+            'use server';
+
+            await signIn('github', { redirectTo: '/dashboard' });
+          }}
+        >
+          <Button className="inline-flex w-full justify-start bg-gray-800 text-center text-white">
+            <GithubIcon className="mr-2 size-6" />
+            <span className="flex w-full justify-center">
+              Sign in with Github
+            </span>
+          </Button>
+        </form>
       </div>
     </div>
   );
