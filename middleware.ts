@@ -8,9 +8,14 @@ export default auth((req) => {
     return NextResponse.redirect(newUrl);
   }
 
+  if (req.auth && ['/sign-in', '/'].includes(req.nextUrl.pathname)) {
+    const newUrl = new URL('/dashboard', req.nextUrl.origin);
+    return NextResponse.redirect(newUrl);
+  }
+
   return NextResponse.next();
 });
 
 export const config = {
-  matcher: ['/dashboard/(.*)'],
+  matcher: '/((?!api|static|.*\\..*|_next).*)',
 };

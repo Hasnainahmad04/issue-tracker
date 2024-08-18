@@ -14,5 +14,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     authorized: async ({ auth: session }) => {
       return !!session;
     },
+    jwt({ token, user }) {
+      const clone = { ...token };
+      if (user) {
+        clone.id = user.id;
+      }
+      return clone;
+    },
   },
 });

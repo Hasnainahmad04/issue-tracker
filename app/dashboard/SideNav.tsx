@@ -16,6 +16,8 @@ import {
 } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
 
+import Logout from './Logout';
+
 type NavItem = {
   title: string;
   icon: LucideIcon;
@@ -66,7 +68,7 @@ export function Nav() {
         data-collapsed={isCollapsed}
         className="group flex h-[calc(100vh-4rem)] flex-col gap-4 border-r py-2 data-[collapsed=true]:py-2 md:w-48"
       >
-        <nav className="grid gap-2 px-2 group-[[data-collapsed=true]]:justify-center group-[[data-collapsed=true]]:px-2">
+        <nav className="flex h-full flex-col gap-2 px-2 group-[[data-collapsed=true]]:justify-center group-[[data-collapsed=true]]:px-2">
           {links.map((link) =>
             isCollapsed ? (
               <Tooltip key={`nav-${link.title}`} delayDuration={0}>
@@ -109,6 +111,7 @@ export function Nav() {
               </Link>
             ),
           )}
+          <Logout />
         </nav>
       </div>
     </TooltipProvider>
