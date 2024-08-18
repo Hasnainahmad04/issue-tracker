@@ -1,6 +1,9 @@
 'use client';
 
+import Image from 'next/image';
 import { useEffect } from 'react';
+
+import { Button } from '@/components/ui/button';
 
 export default function Error({
   error,
@@ -15,17 +18,23 @@ export default function Error({
   }, [error]);
 
   return (
-    <div>
+    <main className="prose mx-auto flex min-h-screen w-full flex-col items-center justify-center text-center">
+      <Image
+        src="/server-error.svg"
+        width={500}
+        height={500}
+        alt="server_error"
+        className="size-80"
+      />
       <h2>Something went wrong!</h2>
-      <button
-        type="button"
-        onClick={
-          // Attempt to recover by trying to re-render the segment
-          () => reset()
-        }
-      >
+      <p className="text-lg">
+        We encountered an unexpected error. Please try refreshing the page or
+        come back later. If the problem persists, contact support for
+        assistance.
+      </p>
+      <Button variant="destructive" onClick={() => reset()} className="mt-6">
         Try again
-      </button>
-    </div>
+      </Button>
+    </main>
   );
 }

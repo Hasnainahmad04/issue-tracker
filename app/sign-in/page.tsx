@@ -5,7 +5,7 @@ import React from 'react';
 import { signIn } from '@/auth';
 import { Button } from '@/components/ui/button';
 
-const SignInPage = () => {
+const SignInPage = async () => {
   return (
     <div className="mx-auto flex min-h-screen w-full flex-col items-center justify-between gap-10 bg-gray-50 px-10 pt-10 lg:flex-row">
       <div className="flex flex-col items-center justify-center space-y-6 lg:w-1/2">

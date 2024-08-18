@@ -10,7 +10,7 @@ export default function Layout({
   return (
     <main>
       <header className="h-16 border-b">
-        <span className="my-4 inline-flex items-center gap-2 px-2 text-3xl font-medium">
+        <span className="my-4 inline-flex items-center gap-2 px-2 text-2xl font-medium">
           <CalendarClock className="size-8" />
           FixIt
         </span>
