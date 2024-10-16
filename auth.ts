@@ -11,9 +11,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   pages: { signIn: '/sign-in' },
   session: { strategy: 'jwt' },
   callbacks: {
-    authorized: async ({ auth: session }) => {
-      return !!session;
-    },
+    authorized: async () => true,
     jwt({ token, user }) {
       const clone = { ...token };
       if (user) {
