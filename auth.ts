@@ -19,5 +19,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       }
       return clone;
     },
+    session({ session, token }) {
+      const clone = { ...session, user: { ...session.user } };
+      clone.user.id = token.id as string;
+      return clone;
+    },
   },
 });

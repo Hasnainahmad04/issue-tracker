@@ -11,13 +11,14 @@ export const createIssueSchema = z.object({
     .min(1),
   priority: z.enum(['LOW', 'MEDIUM', 'HIGH']),
   label: z.enum(['BUG', 'FEATURE', 'DOCUMENTATION']),
+  createdBy: z.string(),
   assets: z.array(z.object({ url: z.string(), type: z.string() })),
   status: z
     .enum(['TODO', 'BACKLOG', 'DONE', 'IN_PROGRESS', 'CANCELLED'])
     .optional(),
 });
 
-export const searchParamsSchema = z.object({
+export const filtersSchema = z.object({
   sort: z.enum(['asc', 'desc']).optional(),
   orderBy: z.string().optional(),
   page: z.coerce.number().optional(),

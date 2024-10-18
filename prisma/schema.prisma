@@ -18,7 +18,10 @@ model Issue {
   updatedAt   DateTime @updatedAt
   label       Label    @default(BUG)
   priority    Priority @default(LOW)
+  createdBy   String
   assets      Asset[]
+
+  assignee User @relation(fields: [createdBy], references: [id], onDelete: Cascade)
 }
 
 model Asset {
@@ -62,6 +65,7 @@ model User {
   sessions      Session[]
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
+  Issue         Issue[]
 }
 
 model Account {

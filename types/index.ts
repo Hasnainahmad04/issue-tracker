@@ -1,12 +1,7 @@
 import type { Label, Priority, Status } from '@prisma/client';
+import type { z } from 'zod';
 
-export type QueryParams = {
-  sort?: 'asc' | 'desc';
-  orderBy?: string;
-  page?: number;
-  limit?: number;
-  q?: string;
-};
+import type { filtersSchema } from '@/lib/validators';
 
 export type MetaData = {
   page: number;
@@ -38,3 +33,5 @@ export type IssueResponse = {
   data: Issue[];
   metadata: MetaData;
 };
+
+export type SearchFilters = z.infer<typeof filtersSchema>;

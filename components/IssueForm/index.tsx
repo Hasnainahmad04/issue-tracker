@@ -7,6 +7,7 @@ import type { Issue } from '@prisma/client';
 import { nanoid } from 'nanoid';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
@@ -42,6 +43,10 @@ const SimpleMDE = dynamic(() => import('react-simplemde-editor'), {
 export type IssueFormType = z.infer<typeof createIssueSchema>;
 
 const IssueForm = ({ issue }: { issue?: Issue }) => {
+  const { data: session } = useSession();
+
+  console.log('session?.user', session?.user);
+
   const { mutateAsync: createNewIssue } = useCreateIssue();
   const { mutateAsync: updateIssue } = useUpdateIssue();
   const [files, setFiles] = useState<FileList | null>(null);
@@ -51,7 +56,12 @@ const IssueForm = ({ issue }: { issue?: Issue }) => {
     resolver: zodResolver(createIssueSchema),
     defaultValues: issue
       ? { ...issue }
-      : { priority: 'LOW', label: 'BUG', assets: [] },
+      : {
+          priority: 'LOW',
+          label: 'BUG',
+          assets: [],
+          createdBy: session?.user?.id,
+        },
   });
 
   const onSubmit = async (data: IssueFormType) => {

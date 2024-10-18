@@ -15,12 +15,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
 import { INITIAL_LIMIT } from '@/lib/constants';
 import type { MetaData } from '@/types';
 
@@ -39,20 +33,15 @@ const PaginationButton = ({
   title: string;
 } & React.PropsWithChildren) => {
   return (
-    <Tooltip delayDuration={0}>
-      <TooltipTrigger>
-        <Button
-          variant="outline"
-          className="hidden size-8 p-0 lg:flex"
-          onClick={onClick}
-          disabled={disabled}
-        >
-          <span className="sr-only">{title}</span>
-          {children}
-        </Button>
-        <TooltipContent>{title}</TooltipContent>
-      </TooltipTrigger>
-    </Tooltip>
+    <Button
+      variant="outline"
+      className="hidden size-8 p-0 lg:flex"
+      onClick={onClick}
+      disabled={disabled}
+    >
+      <span className="sr-only">{title}</span>
+      {children}
+    </Button>
   );
 };
 
@@ -105,7 +94,7 @@ export function DataTablePagination({ metadata }: DataTablePaginationProps) {
             }}
           >
             <SelectTrigger className="h-8 w-[70px]">
-              <SelectValue placeholder={searchParams.get('limit') || 10} />
+              <SelectValue placeholder={searchParams.get('limit') || '10'} />
             </SelectTrigger>
             <SelectContent side="top">
               {[10, 20, 30, 40, 50].map((pageSize) => (
@@ -120,42 +109,40 @@ export function DataTablePagination({ metadata }: DataTablePaginationProps) {
           Page {currentPage} of {pageCount}
         </div>
         <div className="flex items-center space-x-2">
-          <TooltipProvider>
-            <PaginationButton
-              disabled={currentPage === 1}
-              onClick={() => updatePagination({ page: 1, limit: currentLimit })}
-              title="Go to first page"
-            >
-              <ChevronsLeftIcon className="size-4" />
-            </PaginationButton>
-            <PaginationButton
-              title="Go to previous page"
-              onClick={() =>
-                updatePagination({ page: currentPage - 1, limit: currentLimit })
-              }
-              disabled={currentPage === 1}
-            >
-              <ChevronLeftIcon className="size-4" />
-            </PaginationButton>
-            <PaginationButton
-              onClick={() =>
-                updatePagination({ page: currentPage + 1, limit: currentLimit })
-              }
-              disabled={currentPage === pageCount}
-              title="Go to next page"
-            >
-              <ChevronRightIcon className="size-4" />
-            </PaginationButton>
-            <PaginationButton
-              title="Go to last page"
-              onClick={() =>
-                updatePagination({ page: pageCount, limit: currentLimit })
-              }
-              disabled={currentPage === pageCount}
-            >
-              <ChevronsRightIcon className="size-4" />
-            </PaginationButton>
-          </TooltipProvider>
+          <PaginationButton
+            disabled={currentPage === 1}
+            onClick={() => updatePagination({ page: 1, limit: currentLimit })}
+            title="Go to first page"
+          >
+            <ChevronsLeftIcon className="size-4" />
+          </PaginationButton>
+          <PaginationButton
+            title="Go to previous page"
+            onClick={() =>
+              updatePagination({ page: currentPage - 1, limit: currentLimit })
+            }
+            disabled={currentPage === 1}
+          >
+            <ChevronLeftIcon className="size-4" />
+          </PaginationButton>
+          <PaginationButton
+            onClick={() =>
+              updatePagination({ page: currentPage + 1, limit: currentLimit })
+            }
+            disabled={currentPage === pageCount}
+            title="Go to next page"
+          >
+            <ChevronRightIcon className="size-4" />
+          </PaginationButton>
+          <PaginationButton
+            title="Go to last page"
+            onClick={() =>
+              updatePagination({ page: pageCount, limit: currentLimit })
+            }
+            disabled={currentPage === pageCount}
+          >
+            <ChevronsRightIcon className="size-4" />
+          </PaginationButton>
         </div>
       </div>
     </div>

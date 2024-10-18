@@ -1,23 +1,31 @@
+import { Suspense } from 'react';
+
+import { getAllIssues } from '@/lib/actions/issue';
 import { INITIAL_LIMIT } from '@/lib/constants';
-import { getIssues } from '@/services/issue';
-import type { QueryParams } from '@/types';
+import type { SearchFilters } from '@/types';
 
 import { columns } from './data-table/columns';
 import { DataTable } from './data-table/DataTable';
+import Loading from './loading';
 
 export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 const IssuesRoute = async ({
   searchParams: { limit = INITIAL_LIMIT, page = 1, orderBy, sort, q },
 }: {
-  searchParams: QueryParams;
+  searchParams: SearchFilters;
 }) => {
-  const issues = await getIssues({ page, limit, orderBy, sort, q });
+  const issues = await getAllIssues({ page, limit, orderBy, sort, q });
+
+  console.log('issues list', issues);
 
   return (
-    <div className="p-8">
-      <DataTable columns={columns} {...issues} />
-    </div>
+    <Suspense fallback={<Loading />}>
+      <div className="p-8">
+        <DataTable columns={columns} {...issues} />
+      </div>
+    </Suspense>
   );
 };
 
