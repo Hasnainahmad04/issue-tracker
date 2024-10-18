@@ -1,25 +1,8 @@
 'use client';
 
-/* eslint-disable react-hooks/rules-of-hooks */
-
 import type { ColumnDef } from '@tanstack/react-table';
-import { MoreHorizontal } from 'lucide-react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
 
-import DeleteDialog from '@/components/DeleteDialog';
-import { AlertDialogTrigger } from '@/components/ui/alert-dialog';
-import { Button } from '@/components/ui/button';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import useDeleteIssue from '@/hooks/issue/useDeleteIssue';
 import { formatDate } from '@/lib/utils';
 import type { Issue } from '@/types';
 
@@ -88,49 +71,5 @@ export const columns: ColumnDef<Issue>[] = [
       return <span>{formatDate(getValue() as string, 'en-US')}</span>;
     },
     enableSorting: true,
-  },
-  {
-    id: 'actions',
-    cell: ({ row }) => {
-      const issue = row.original;
-      const { mutateAsync: deleteIssue, isPending } = useDeleteIssue();
-      const router = useRouter();
-      const [open, setOpen] = useState(false);
-
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="size-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal className="size-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem>
-              <Link href={`/dashboard/issue/edit/${issue.id}`}>Edit</Link>
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem asChild>
-              <DeleteDialog
-                title={<AlertDialogTrigger>Delete</AlertDialogTrigger>}
-                onOpenChange={setOpen}
-                open={open}
-                issue={issue}
-                loading={isPending}
-                onDelete={() => {
-                  deleteIssue(issue.id, {
-                    onSuccess: () => {
-                      setOpen(false);
-                      router.refresh();
-                    },
-                  });
-                }}
-              />
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
-    },
   },
 ];
