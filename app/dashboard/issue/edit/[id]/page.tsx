@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
 
-import { getIssueDetail } from '@/lib/actions/issue';
 import IssueForm from '@/components/IssueForm';
+import { getIssueDetail } from '@/lib/actions/issue';
 
 type Props = {
   params: { id: string };

@@ -31,9 +31,6 @@ const TableRowSkeleton = () => {
       <TableCell>
         <Skeleton className="h-5 w-40 rounded-sm" />
       </TableCell>
-      <TableCell>
-        <Skeleton className="h-1 w-6 rounded-sm" />
-      </TableCell>
     </TableRow>
   );
 };

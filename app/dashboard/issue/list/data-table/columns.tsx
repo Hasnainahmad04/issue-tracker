@@ -4,14 +4,14 @@ import type { ColumnDef } from '@tanstack/react-table';
 import Link from 'next/link';
 
 import { formatDate } from '@/lib/utils';
-import type { Issue } from '@/types';
+import type { IssueList } from '@/types';
 
 import { DataTableColumnHeader } from './ColumnHeader';
 import Priority from './Priority';
 import Status from './Status';
 import Title from './Title';
 
-export const columns: ColumnDef<Issue>[] = [
+export const columns: ColumnDef<IssueList>[] = [
   {
     accessorKey: 'id',
     header: ({ column }) => (

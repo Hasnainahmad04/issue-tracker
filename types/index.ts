@@ -1,4 +1,4 @@
-import type { Label, Priority, Status } from '@prisma/client';
+import type { Label, Priority, Status, User } from '@prisma/client';
 import type { z } from 'zod';
 
 import type { filtersSchema } from '@/lib/validators';
@@ -19,6 +19,8 @@ export type Issue = {
   label: Label;
   assets: Asset[];
   description: string;
+  assignee: User;
+  createdBy: string;
 };
 
 export type Asset = {
@@ -29,9 +31,6 @@ export type Asset = {
   createdAt: Date;
 };
 
-export type IssueResponse = {
-  data: Issue[];
-  metadata: MetaData;
-};
+export type IssueList = Omit<Issue, 'assets'>;
 
 export type SearchFilters = z.infer<typeof filtersSchema>;
