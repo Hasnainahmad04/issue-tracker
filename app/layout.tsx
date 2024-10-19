@@ -2,6 +2,7 @@ import './globals.css';
 
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
+import { SessionProvider } from 'next-auth/react';
 import NextTopLoader from 'nextjs-toploader';
 import { Toaster } from 'react-hot-toast';
 
@@ -26,7 +27,9 @@ export default function RootLayout({
       >
         <Toaster position="top-center" reverseOrder={false} />
         <NextTopLoader showSpinner={false} color="#1a1b1a" />
-        <ReactQueryProvider>{children}</ReactQueryProvider>
+        <SessionProvider>
+          <ReactQueryProvider>{children}</ReactQueryProvider>
+        </SessionProvider>
       </body>
     </html>
   );

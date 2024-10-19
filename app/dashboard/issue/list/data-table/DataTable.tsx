@@ -59,7 +59,7 @@ export function DataTable<TData, TValue>({
       params.delete('q');
     }
     router.replace(`${currentPath}?${params.toString()}`);
-  }, 500);
+  }, 200);
 
   return (
     <>

@@ -1,12 +1,7 @@
-import type { Label, Priority, Status } from '@prisma/client';
+import type { Label, Priority, Status, User } from '@prisma/client';
+import type { z } from 'zod';
 
-export type QueryParams = {
-  sort?: 'asc' | 'desc';
-  orderBy?: string;
-  page?: number;
-  limit?: number;
-  q?: string;
-};
+import type { createIssueSchema, filtersSchema } from '@/lib/validators';
 
 export type MetaData = {
   page: number;
@@ -24,6 +19,8 @@ export type Issue = {
   label: Label;
   assets: Asset[];
   description: string;
+  assignee: User;
+  createdBy: string;
 };
 
 export type Asset = {
@@ -34,7 +31,7 @@ export type Asset = {
   createdAt: Date;
 };
 
-export type IssueResponse = {
-  data: Issue[];
-  metadata: MetaData;
-};
+export type IssueList = Omit<Issue, 'assets'>;
+
+export type SearchFilters = z.infer<typeof filtersSchema>;
+export type IssuePayload = z.infer<typeof createIssueSchema>;

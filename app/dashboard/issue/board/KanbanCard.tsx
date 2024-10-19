@@ -1,6 +1,6 @@
-import type { Issue } from '@/types';
+import type { IssueList } from '@/types';
 
-const KanbanCard = ({ issue }: { issue: Issue }) => {
+const KanbanCard = ({ issue }: { issue: IssueList }) => {
   return (
     <div className="divide-y rounded-lg border border-neutral-200 bg-white">
       <span className="block p-2 text-sm font-medium text-zinc-900">

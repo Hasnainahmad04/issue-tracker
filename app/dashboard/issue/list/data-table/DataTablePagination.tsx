@@ -5,6 +5,7 @@ import {
   ChevronsRightIcon,
 } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import React from 'react';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -20,6 +21,29 @@ import type { MetaData } from '@/types';
 interface DataTablePaginationProps {
   metadata: MetaData;
 }
+
+const PaginationButton = ({
+  onClick,
+  disabled,
+  title,
+  children,
+}: {
+  onClick: () => void;
+  disabled: boolean;
+  title: string;
+} & React.PropsWithChildren) => {
+  return (
+    <Button
+      variant="outline"
+      className="hidden size-8 p-0 lg:flex"
+      onClick={onClick}
+      disabled={disabled}
+    >
+      <span className="sr-only">{title}</span>
+      {children}
+    </Button>
+  );
+};
 
 export function DataTablePagination({ metadata }: DataTablePaginationProps) {
   const router = useRouter();
@@ -70,7 +94,7 @@ export function DataTablePagination({ metadata }: DataTablePaginationProps) {
             }}
           >
             <SelectTrigger className="h-8 w-[70px]">
-              <SelectValue placeholder={searchParams.get('limit') || 10} />
+              <SelectValue placeholder={searchParams.get('limit') || '10'} />
             </SelectTrigger>
             <SelectContent side="top">
               {[10, 20, 30, 40, 50].map((pageSize) => (
@@ -85,48 +109,40 @@ export function DataTablePagination({ metadata }: DataTablePaginationProps) {
           Page {currentPage} of {pageCount}
         </div>
         <div className="flex items-center space-x-2">
-          <Button
-            variant="outline"
-            className="hidden size-8 p-0 lg:flex"
-            onClick={() => updatePagination({ page: 1, limit: currentLimit })}
+          <PaginationButton
             disabled={currentPage === 1}
+            onClick={() => updatePagination({ page: 1, limit: currentLimit })}
+            title="Go to first page"
           >
-            <span className="sr-only">Go to first page</span>
             <ChevronsLeftIcon className="size-4" />
-          </Button>
-          <Button
-            variant="outline"
-            className="size-8 p-0"
+          </PaginationButton>
+          <PaginationButton
+            title="Go to previous page"
             onClick={() =>
               updatePagination({ page: currentPage - 1, limit: currentLimit })
             }
             disabled={currentPage === 1}
           >
-            <span className="sr-only">Go to previous page</span>
             <ChevronLeftIcon className="size-4" />
-          </Button>
-          <Button
-            variant="outline"
-            className="size-8 p-0"
+          </PaginationButton>
+          <PaginationButton
             onClick={() =>
               updatePagination({ page: currentPage + 1, limit: currentLimit })
             }
             disabled={currentPage === pageCount}
+            title="Go to next page"
           >
-            <span className="sr-only">Go to next page</span>
             <ChevronRightIcon className="size-4" />
-          </Button>
-          <Button
-            variant="outline"
-            className="hidden size-8 p-0 lg:flex"
+          </PaginationButton>
+          <PaginationButton
+            title="Go to last page"
             onClick={() =>
               updatePagination({ page: pageCount, limit: currentLimit })
             }
             disabled={currentPage === pageCount}
           >
-            <span className="sr-only">Go to last page</span>
             <ChevronsRightIcon className="size-4" />
-          </Button>
+          </PaginationButton>
         </div>
       </div>
     </div>

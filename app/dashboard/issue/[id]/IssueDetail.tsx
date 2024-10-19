@@ -15,7 +15,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import useDeleteIssue from '@/hooks/issue/useDeleteIssue';
+import { deleteIssue } from '@/lib/actions/issue';
 import { cn, formatDate } from '@/lib/utils';
 import type { Issue } from '@/types';
 
@@ -26,8 +26,20 @@ type Props = {
 const IssueDetail = ({ issue }: Props) => {
   const [open, setOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState(0);
-  const { mutate: deleteIssue, isPending } = useDeleteIssue();
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+
+  const handleDelete = async () => {
+    setIsLoading(true);
+    try {
+      await deleteIssue(issue.id);
+      router.replace('/dashboard/issue/list');
+    } catch (error) {
+      console.log(error);
+    }
+
+    setIsLoading(false);
+  };
 
   return (
     <div className="prose mx-auto">
@@ -69,15 +81,8 @@ const IssueDetail = ({ issue }: Props) => {
               onOpenChange={setOpen}
               open={open}
               issue={issue}
-              loading={isPending}
-              onDelete={() => {
-                deleteIssue(issue.id, {
-                  onSuccess: () => {
-                    setOpen(false);
-                    router.replace('/dashboard/issue/list');
-                  },
-                });
-              }}
+              loading={isLoading}
+              onDelete={handleDelete}
             />
           </TooltipProvider>
         </div>
