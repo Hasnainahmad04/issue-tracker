@@ -20,6 +20,8 @@ const IssuesRoute = async ({
 
   if (!issues) return;
 
+  console.log(JSON.stringify(issues, null, 4), 'list');
+
   return (
     <Suspense fallback={<Loading />}>
       <div className="p-8">

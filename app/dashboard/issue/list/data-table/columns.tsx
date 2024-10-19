@@ -3,7 +3,8 @@
 import type { ColumnDef } from '@tanstack/react-table';
 import Link from 'next/link';
 
-import { formatDate } from '@/lib/utils';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { formatDate, getInitials } from '@/lib/utils';
 import type { IssueList } from '@/types';
 
 import { DataTableColumnHeader } from './ColumnHeader';
@@ -71,5 +72,25 @@ export const columns: ColumnDef<IssueList>[] = [
       return <span>{formatDate(getValue() as string, 'en-US')}</span>;
     },
     enableSorting: true,
+  },
+  {
+    accessorKey: 'assignee.image',
+    header: ({ column }) => (
+      <DataTableColumnHeader title="Assignee" column={column.id} />
+    ),
+    cell({ row }) {
+      return (
+        <Avatar>
+          {row.original.assignee.image ? (
+            <AvatarImage src={row.original.assignee.image} />
+          ) : (
+            <AvatarFallback>
+              {getInitials(row.original.assignee.name || '')}
+            </AvatarFallback>
+          )}
+        </Avatar>
+      );
+    },
+    enableSorting: false,
   },
 ];

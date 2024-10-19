@@ -31,6 +31,9 @@ const TableRowSkeleton = () => {
       <TableCell>
         <Skeleton className="h-5 w-40 rounded-sm" />
       </TableCell>
+      <TableCell>
+        <Skeleton className="size-10 rounded-full" />
+      </TableCell>
     </TableRow>
   );
 };
@@ -45,6 +48,7 @@ export const TableSkeleton = () => {
           <TableHead>Status</TableHead>
           <TableHead>Priority</TableHead>
           <TableHead>Created At</TableHead>
+          <TableHead>Assignee</TableHead>
           <TableHead />
         </TableRow>
       </TableHeader>

@@ -33,3 +33,10 @@ export function groupBy<Type, Key extends keyof Type>(
 
   return Object.fromEntries(map);
 }
+
+export const getInitials = (s: string) => {
+  return s
+    .split(' ')
+    .map((s) => s.charAt(0).toUpperCase())
+    .join('');
+};
