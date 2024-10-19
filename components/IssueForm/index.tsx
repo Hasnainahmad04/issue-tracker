@@ -3,12 +3,9 @@
 import 'easymde/dist/easymde.min.css';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import type { Issue } from '@prisma/client';
-import { nanoid } from 'nanoid';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
-import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
 import type { z } from 'zod';
@@ -30,10 +27,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import useCreateIssue from '@/hooks/issue/useCreateIssue';
-import useUpdateIssue from '@/hooks/issue/useUpdateIssue';
+import { createNewIssue } from '@/lib/actions/issue';
 import { LABELS, PRIORITIES } from '@/lib/constants';
-import { supabase } from '@/lib/supabse';
 import { createIssueSchema } from '@/lib/validators';
 
 const SimpleMDE = dynamic(() => import('react-simplemde-editor'), {
@@ -42,71 +37,31 @@ const SimpleMDE = dynamic(() => import('react-simplemde-editor'), {
 
 export type IssueFormType = z.infer<typeof createIssueSchema>;
 
-const IssueForm = ({ issue }: { issue?: Issue }) => {
+const IssueForm = () => {
   const { data: session } = useSession();
-
-  console.log('session?.user', session?.user);
-
-  const { mutateAsync: createNewIssue } = useCreateIssue();
-  const { mutateAsync: updateIssue } = useUpdateIssue();
-  const [files, setFiles] = useState<FileList | null>(null);
 
   const navigation = useRouter();
   const form = useForm<IssueFormType>({
     resolver: zodResolver(createIssueSchema),
-    defaultValues: issue
-      ? { ...issue }
-      : {
-          priority: 'LOW',
-          label: 'BUG',
-          assets: [],
-          createdBy: session?.user?.id,
-        },
+    defaultValues: {
+      priority: 'LOW',
+      label: 'BUG',
+      assets: [],
+      createdBy: session?.user?.id,
+    },
   });
 
   const onSubmit = async (data: IssueFormType) => {
-    const onSuccess = () => {
-      navigation.replace('/dashboard/issue/list', { scroll: false });
-    };
-
-    const assets = await Promise.all(
-      Array.from(files || []).map(async (file) => {
-        const id = nanoid();
-        const [type, fileType] = file.type.split('/');
-
-        const { data: result } = await supabase.storage
-          .from('images')
-          .upload(`${id}.${fileType}`, file);
-
-        if (!result) return null;
-
-        const { data: url } = supabase.storage
-          .from('images')
-          .getPublicUrl(result.path);
-
-        return { type: type!, url: url.publicUrl };
-      }),
+    toast.promise(
+      createNewIssue(data).then(() =>
+        navigation.replace('/dashboard/issue/list', { scroll: false }),
+      ),
+      {
+        error: 'Error while creating new issue',
+        loading: 'Submitting',
+        success: 'Created',
+      },
     );
-
-    if (issue?.id) {
-      toast.promise(updateIssue({ id: issue.id, data }, { onSuccess }), {
-        error: 'Failed to update',
-        loading: 'Updating',
-        success: 'Updated',
-      });
-    } else {
-      toast.promise(
-        createNewIssue(
-          { ...data, assets: assets.filter((asset) => asset !== null) },
-          { onSuccess },
-        ),
-        {
-          error: 'Failed to update',
-          loading: 'Submitting',
-          success: 'Created',
-        },
-      );
-    }
   };
 
   return (
@@ -138,18 +93,6 @@ const IssueForm = ({ issue }: { issue?: Issue }) => {
             </FormItem>
           )}
         />
-
-        {!issue && (
-          <FormItem>
-            <FormLabel>Asset</FormLabel>
-            <Input
-              type="file"
-              accept="image/*"
-              onChange={(e) => setFiles(e.target.files)}
-              multiple
-            />
-          </FormItem>
-        )}
 
         <div className="flex w-full space-x-3">
           <FormField
@@ -209,15 +152,9 @@ const IssueForm = ({ issue }: { issue?: Issue }) => {
           />
         </div>
         <div className="flex w-full justify-end">
-          {issue?.id ? (
-            <Button type="submit" disabled={form.formState.isSubmitting}>
-              {form.formState.isSubmitting ? 'Updating...' : 'Update'}
-            </Button>
-          ) : (
-            <Button type="submit" disabled={form.formState.isSubmitting}>
-              {form.formState.isSubmitting ? 'Submitting...' : 'Submit'}
-            </Button>
-          )}
+          <Button type="submit" disabled={form.formState.isSubmitting}>
+            {form.formState.isSubmitting ? 'Submitting...' : 'Submit'}
+          </Button>
         </div>
       </form>
     </Form>

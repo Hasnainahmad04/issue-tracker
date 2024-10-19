@@ -4,7 +4,6 @@ import type { DragEndEvent } from '@dnd-kit/core';
 import type { Status } from '@prisma/client';
 import React, { useState } from 'react';
 
-import useUpdateIssue from '@/hooks/issue/useUpdateIssue';
 import { groupBy } from '@/lib/utils';
 import type { IssueList } from '@/types';
 
@@ -25,7 +24,6 @@ const Board = ({ data }: React.PropsWithChildren<Props>) => {
     DONE: [],
     CANCELLED: [],
   };
-  const { mutate: updateIssueStatus } = useUpdateIssue();
   const [taskStages, setTaskStages] = useState({
     ...initialState,
     ...groupBy<IssueList, 'status'>(data, (item) => item.status),
@@ -47,18 +45,6 @@ const Board = ({ data }: React.PropsWithChildren<Props>) => {
       state[status].push({ ...issue, status });
 
       setTaskStages(state);
-      updateIssueStatus(
-        { id: Number(taskId), data: { ...issue, status } },
-
-        {
-          onSuccess: () => {
-            alert('Status Updated');
-          },
-          onError: () => {
-            setTaskStages(taskStages);
-          },
-        },
-      );
     }
   };
 

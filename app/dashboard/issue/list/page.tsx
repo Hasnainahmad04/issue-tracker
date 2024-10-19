@@ -18,7 +18,7 @@ const IssuesRoute = async ({
 }) => {
   const issues = await getAllIssues({ page, limit, orderBy, sort, q });
 
-  console.log('issues list', issues);
+  if (!issues) return;
 
   return (
     <Suspense fallback={<Loading />}>

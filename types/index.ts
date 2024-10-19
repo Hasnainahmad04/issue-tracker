@@ -1,7 +1,7 @@
 import type { Label, Priority, Status, User } from '@prisma/client';
 import type { z } from 'zod';
 
-import type { filtersSchema } from '@/lib/validators';
+import type { createIssueSchema, filtersSchema } from '@/lib/validators';
 
 export type MetaData = {
   page: number;
@@ -34,3 +34,4 @@ export type Asset = {
 export type IssueList = Omit<Issue, 'assets'>;
 
 export type SearchFilters = z.infer<typeof filtersSchema>;
+export type IssuePayload = z.infer<typeof createIssueSchema>;
